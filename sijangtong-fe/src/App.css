@@ -1,7 +1,7 @@
 #app {
   margin: 0 auto;
   background-color: #ffffff; 
-  min-height: 100vh;
+  height: 650px;
 }
 
 /* 모바일 화면에서는 너비를 100%로 덮어쓰기 */
@@ -9,6 +9,7 @@
   #app {
     width: 100%;
     max-width: 100%;
+    height: 100vh;
     margin: 0; 
   }
 }
