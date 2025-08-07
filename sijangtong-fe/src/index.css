@@ -28,5 +28,6 @@ font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFon
   #app {
     width: 388px; /* 데스크톱에서는 388px 고정 */
     padding-top: 1rem; /* 상단 여백 유지-변동가능*/
+    
   }
 }
