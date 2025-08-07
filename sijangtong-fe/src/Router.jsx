@@ -1,15 +1,14 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Onboarding from "./pages/Onboarding";
 
 const Router = () => {
-    return(
-        <BrowserRouter>
-            <Routes>
-                
-                
-            </Routes>
-        </BrowserRouter>
-    );
-
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Onboarding />} />
+      </Routes>
+    </BrowserRouter>
+  );
 };
 
 export default Router;
