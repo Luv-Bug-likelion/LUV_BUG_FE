@@ -1,0 +1,33 @@
+/*글씨체 설정 : 기본은 pretendard variable*/
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+/* 위의 사이트가 되는한 pretendard가 로딩되고 그 이후로 디폴트를 순서대로 명세*/
+body{
+font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+}
+
+/* 반응형 : 모바일 화면에 대한 스타일 */
+@media (max-width: 420px) {
+  body {
+    background-color: #ffffff; /* 모바일 배경색 */
+  }
+
+  #app {
+    width: 388px; /* 모바일에서는 100% 너비, 즉 화면 너비에 맞춤 */
+    max-width: 420px; /* 최대 너비는 여전히 388px */
+    padding-top: 0.5rem; /* 모바일에서의 상단 여백 조정 - 변동가능 */
+  }
+}
+
+/* 데스크톱 화면에 대한 스타일 */
+@media (min-width: 769px) {
+  /* 데스크톱에서의 스타일 설정 */
+  body {
+    background-color: #cccccc; /* 데스크톱 배경색 */
+  }
+
+  #app {
+    width: 388px; /* 데스크톱에서는 388px 고정 */
+    padding-top: 1rem; /* 상단 여백 유지-변동가능*/
+    
+  }
+}
