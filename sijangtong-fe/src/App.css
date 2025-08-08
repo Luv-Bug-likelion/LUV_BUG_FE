@@ -1,0 +1,15 @@
+#app {
+  margin: 0 auto;
+  background-color: #ffffff; 
+  height: 650px;
+}
+
+/* 모바일 화면에서는 너비를 100%로 덮어쓰기 */
+@media (max-width: 420px) {
+  #app {
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+    margin: 0; 
+  }
+}
