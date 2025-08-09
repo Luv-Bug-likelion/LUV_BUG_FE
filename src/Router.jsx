@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Onboarding from "./pages/Onboarding";
+import Onboarding from "./pages/Onboarding/Onboarding";
 import MarketMap from "./pages/map/MarketMap";
 
 const Router = () => {
