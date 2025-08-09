@@ -1,11 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Onboarding from "./pages/Onboarding";
+import MarketMap from "./pages/map/MarketMap";
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Onboarding />} />
+        <Route path="/map" element={<MarketMap />} />
       </Routes>
     </BrowserRouter>
   );
