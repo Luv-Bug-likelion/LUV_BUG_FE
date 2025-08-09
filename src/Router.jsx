@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Onboarding from "./pages/Onboarding";
 import MarketMap from "./pages/map/MarketMap";
+import Guide from "./pages/guide/guide";
 
 const Router = () => {
   return (
@@ -8,6 +9,7 @@ const Router = () => {
       <Routes>
         <Route path="/" element={<Onboarding />} />
         <Route path="/map" element={<MarketMap />} />
+        <Route path="/guide" element={<Guide />} />
       </Routes>
     </BrowserRouter>
   );
