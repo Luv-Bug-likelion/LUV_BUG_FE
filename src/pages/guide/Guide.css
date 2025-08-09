@@ -1,0 +1,142 @@
+@font-face {
+  font-family: "BMEuljiro10yearslater";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/BMEuljiro10yearslater.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.guide-page {
+  position: relative;
+  height: 840px;
+  width: 388px;
+  margin-top: 62px;
+  padding: 30px 16px 28px;
+  box-sizing: border-box;
+  background: url("../../assets/시장배경.png") center 119px / cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.guide-title {
+  font-size: 60px;
+  letter-spacing: 0.02em;
+  color: #284a3b;
+  margin: 0 34px 17px 34px;
+  font-family: "BMEuljiro10yearslater", sans-serif;
+  font-weight: normal;
+  text-align: center;
+}
+
+.guidestory {
+  flex: 1 1 auto;
+  margin: 0;
+  padding-right: 4px;
+  word-break: keep-all;
+
+  display: flow-root;
+}
+
+.guide-card {
+  width: 292px;
+  min-height: 441px;
+  background: #e0e0e0f2;
+  backdrop-filter: blur(2px);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  padding: 5px 5px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  border: 2px solid #00000099;
+  margin: 17px 49px 21px 47px;
+  position: relative;
+}
+
+.guide-sub {
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #9b9b9e;
+  margin: 4px 35px 17px 33px;
+  font-family: "BMEuljiro10yearslater", sans-serif;
+}
+
+.guidestory strong {
+  display: block;
+  font-weight: 700;
+  font-size: 16px;
+  margin: 0 0 4px;
+  padding: 0;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.guidestory p {
+  font-size: 10px;
+  line-height: 1;
+  color: #111;
+  margin: 0;
+  padding: 0;
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+
+.guide-story {
+  margin-bottom: 12px;
+}
+
+.guide-story:nth-child(1) {
+  margin: 20px 30px 12px 33px;
+}
+
+.guide-story:nth-child(2) {
+  margin: 0px 29px 12px 33px;
+}
+
+.guide-story:nth-child(3) {
+  margin: 0px 33px 12px 33px;
+}
+
+.guide-story:nth-child(4) {
+  margin: 0px 36px 12px 33px;
+}
+
+.guide-story:nth-child(5) {
+  margin: 0px 23px 12px 33px;
+}
+
+.guide-story:nth-child(6) {
+  margin: 0px 24px 12px 33px;
+}
+
+.guide-story:nth-child(7) {
+  margin: 0 32px 0 33px;
+  padding-bottom: 21px;
+}
+.guide-button {
+  width: 232px;
+  height: 52px;
+  border-radius: 20px;
+  padding: 10px;
+  background: #fff;
+  font-weight: 800;
+  font-size: 20px;
+  cursor: pointer;
+  border: none;
+  margin: 0;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.character {
+  position: absolute;
+  margin: 539px 280px 200px 1px;
+  width: 100px;
+  height: 101px;
+  z-index: 9999999;
+  pointer-events: none;
+}
