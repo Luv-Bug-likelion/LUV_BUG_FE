@@ -1,8 +1,11 @@
 import React from "react";
 import "./Guide.css";
 import mascot from "../../assets/한복핸썹.png";
+import { useNavigate } from "react-router-dom";
 
 const Guide = () => {
+  const navigate = useNavigate();
+  const handleStart = () => navigate("/budget");
   return (
     <div className="guide-page">
       <h1 className="guide-title">사용방법</h1>
@@ -62,8 +65,9 @@ const Guide = () => {
           </div>
         </div>
       </div>
-      <button className="guide-button">시작하기</button>
-
+      <button className="guide-button" onClick={handleStart}>
+        시작하기
+      </button>
       <img src={mascot} alt="마스코트" className="character" />
     </div>
   );

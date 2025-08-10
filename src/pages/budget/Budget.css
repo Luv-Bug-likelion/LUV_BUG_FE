@@ -1,0 +1,143 @@
+@font-face {
+  font-family: "BMEuljiro10yearslater";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/BMEuljiro10yearslater.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 페이지 */
+.budget-page {
+  position: relative;
+  height: 840px;
+  width: 388px;
+  margin-top: 58px;
+  padding: 30px 16px 28px;
+  background: url("../../assets/시장배경.png") center 100px / cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.budget-page h1 {
+  font-size: 32px;
+  color: #284a3b;
+  margin: 71px 0 16px;
+  font-family: "BMEuljiro10yearslater", sans-serif;
+  text-align: center;
+}
+
+.budget-page p {
+  font-size: 12px;
+  color: #9b9b9e;
+  margin: 0 0 111px;
+  font-family: "BMEuljiro10yearslater", sans-serif;
+  text-align: center;
+}
+
+/* 말풍선 */
+.speech-bubble {
+  position: relative;
+  display: block;
+  max-width: calc(100% - 32px);
+  margin: 0 46px 16px;
+  text-align: center;
+  padding: 12px 16px;
+  background: #fff;
+  border-radius: 14px;
+  line-height: 1.45;
+  color: #111;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  font-size: 12px;
+}
+.speech-bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  transform: translateX(-50%);
+  border-style: solid;
+  border-width: 10px 9px 0 9px;
+  border-color: #fff transparent transparent transparent;
+}
+
+/* 캐릭터 */
+.character-img {
+  width: 172px;
+  height: 232px;
+  margin: 0 108px 20px;
+  pointer-events: none;
+}
+
+/* 입력 */
+.budget-wrap {
+  position: relative;
+  width: 356px;
+  margin: 0 16px 26px;
+}
+.budget-box {
+  width: 100%;
+  height: 51px;
+  padding: 0 44px 0 16px;
+  border: none;
+  border-radius: 10px;
+  background-color: #efefefd9;
+  color: #111;
+  font-size: 16px;
+  outline: none;
+}
+.budget-wrap:focus-within .budget-box::placeholder {
+  color: transparent;
+}
+
+.won-adorn {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #111;
+  line-height: 1;
+  pointer-events: none;
+  display: none;
+}
+.budget-wrap:focus-within .won-adorn,
+.budget-wrap .budget-box:not(:placeholder-shown) ~ .won-adorn {
+  display: block;
+}
+
+/* 버튼 */
+.mission-button {
+  width: 232px;
+  height: 52px;
+  border: none;
+  border-radius: 20px;
+  font-size: 20px;
+  background: #ffffff99;
+  color: #11111166;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease,
+    color 0.1s ease;
+}
+
+/* made=true 일 때만 강조 */
+.mission-button.active {
+  background-color: #284a3b;
+  color: #fff;
+  cursor: pointer;
+}
+.mission-button.active:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.mission-button::before,
+.mission-button::after {
+  content: none !important;
+}

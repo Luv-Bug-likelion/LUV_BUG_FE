@@ -1,0 +1,27 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35); /* ← 알파값 꼭! */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 9998;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 9999;
+}
+
+.modal-card {
+  width: 296px;
+  height: 403px;
+  max-height: 80vh;
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  overflow: auto;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+}
