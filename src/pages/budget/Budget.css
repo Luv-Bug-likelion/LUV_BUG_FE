@@ -124,20 +124,31 @@
   color: #11111166;
   transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease,
     color 0.1s ease;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+.mission-button:hover {
+  background: #ffffff;
+  color: #111111;
 }
 
-/* made=true 일 때만 강조 */
-.mission-button.active {
-  background-color: #284a3b;
-  color: #fff;
-  cursor: pointer;
-}
-.mission-button.active:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+.modal-backdrop {
+  position: fixed;
+  inset: 0; /* top/right/bottom/left: 0 */
+  background: rgba(0, 0, 0, 0.3); /* 살짝 어둡게 + 투명해야 blur가 보임 */
+  backdrop-filter: blur(6px); /* 핵심! */
+  -webkit-backdrop-filter: blur(6px); /* 사파리 대응 */
+  z-index: 1000;
+
+  display: grid;
+  place-items: center;
 }
 
-.mission-button::before,
-.mission-button::after {
-  content: none !important;
+.modal-content {
+  background: #fff;
+  border-radius: 16px;
+  max-width: 360px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }

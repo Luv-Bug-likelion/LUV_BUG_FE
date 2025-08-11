@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import "./Story.css";
+import React, { useState, useEffect, useCallback } from "react";
+import "./Sijang.css";
 
 function Sijang({ onSelect, onClose }) {
-  // ← onClose 추가(바깥 클릭/확인 닫기)
   const [selected, setSelected] = useState(null);
 
   const items = [
@@ -27,44 +26,66 @@ function Sijang({ onSelect, onClose }) {
   const handleConfirm = () => {
     if (!selected) return;
     onSelect?.(selected);
-    onClose?.(); // ← 확인 누르면 닫기
+    onClose?.();
   };
 
-  const stop = (e) => e.stopPropagation(); // ← 카드 내부 클릭 시 닫힘 방지
+  const stop = (e) => e.stopPropagation();
+
+  // ESC로 닫기
+  const onEsc = useCallback(
+    (e) => {
+      if (e.key === "Escape") onClose?.();
+    },
+    [onClose]
+  );
+  useEffect(() => {
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, [onEsc]);
 
   return (
     <>
-      {/* 1) 뒤 배경 블러 + 딤 */}
-      <div className="modal-overlay" onClick={onClose} />
+      {/* 뒤 배경 (블러+딤) */}
+      <div className="sijang-overlay" onClick={onClose} />
 
-      {/* 2) 가운데 정렬 래퍼 */}
-      <div className="modal" onClick={onClose}>
-        {/* 3) 실제 카드 */}
-        <div className="modal-card" onClick={stop}>
-          <div className="box">
+      {/* 가운데 정렬 */}
+      <div className="sijang-modal" onClick={onClose}>
+        <div
+          className="sijang-card"
+          onClick={stop}
+          role="dialog"
+          aria-modal="true"
+          aria-label="시장 선택"
+        >
+          {/* 6행 × 3열 그리드 */}
+          <div className="sijang-grid">
             {items.map((item) => (
-              <div key={item.id}>
-                <div
-                  className={`item ${selected === item.id ? "active" : ""}`}
-                  onClick={() => setSelected(item.id)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" ? setSelected(item.id) : null
-                  }
-                >
-                  {item.text}
-                </div>
+              <div
+                key={item.id}
+                className={`sijang-cell ${
+                  selected === item.id ? "active" : ""
+                } ${item.id !== 6 ? "disabled" : ""}`}
+                onClick={() => {
+                  if (item.id === 6) setSelected(item.id); // id 6만 클릭 가능
+                }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && item.id === 6) setSelected(item.id);
+                }}
+              >
+                {item.text}
               </div>
             ))}
-            <button
-              className="story-check"
-              onClick={handleConfirm}
-              disabled={!selected}
-            >
-              확인
-            </button>
           </div>
+
+          <button
+            className="sijang-confirm"
+            onClick={handleConfirm}
+            disabled={!selected}
+          >
+            확인
+          </button>
         </div>
       </div>
     </>

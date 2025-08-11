@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Budget.css";
-import mascot2 from "../../assets/한복핸썹.png";
+import mascot2 from "../../assets/한복핸썹여백없음.png";
 import Story from "../../components/Story";
 import Sijang from "../../components/Sijang";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -21,7 +21,6 @@ const Budget = ({ budget, setBudget, onNext }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // /story 라우트에서 돌아온 경우 (페이지 모드에서 확인 눌렀을 때)
   useEffect(() => {
     if (location.state?.fromStory) {
       setMarketStep(true);
@@ -66,7 +65,7 @@ const Budget = ({ budget, setBudget, onNext }) => {
     : "스토리 선택하기";
 
   return (
-    <div className="budget-page">
+    <div className={`budget-page ${showStory || showSijang ? "blur" : ""}`}>
       <h1>시장통</h1>
       <p>#시간 가는 줄 모르고 장 보며 통 크게 리워드 얻자!</p>
 
@@ -97,21 +96,18 @@ const Budget = ({ budget, setBudget, onNext }) => {
       >
         {buttonLabel}
       </button>
-
       {/* 스토리 모달 */}
       {showStory && (
         <div className="modal-backdrop" onClick={() => setShowStory(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <Story
               onSelect={(id) => {
-                // 모달 모드: 부모 상태만 갱신하고 닫기
                 handleStorySelect(id, true);
               }}
             />
           </div>
         </div>
       )}
-
       {/* 시장 모달 */}
       {showSijang && (
         <div className="modal-backdrop" onClick={() => setShowSijang(false)}>
@@ -120,7 +116,6 @@ const Budget = ({ budget, setBudget, onNext }) => {
               onSelect={(id) => {
                 setMarketId(id);
                 setShowSijang(false);
-                // 다음 단계로 이동하고 싶으면 주석 해제
                 // navigate("/map", { state: { budget: budgetVal, storyId, marketId: id } });
               }}
             />
