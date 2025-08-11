@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import StoreBottomSheet from '../../components/StoreBottomSheet.jsx';
 import KakaoMap from "../../components/KakaoMap";
+import triangleIcon from '../../assets/triangle.svg';
 import './MarketMap.css';
 
 const mockData = {
@@ -68,7 +69,7 @@ return(
             <div className="header">
                 <div className="header-contents">
                     <p>역곡남부시장</p>
-                    <img src="/src/assets/triangle.svg" alt="Triangle" className="triangle-icon" />
+                    <img src={triangleIcon} alt="Triangle" className="triangle-icon" />
                 </div>
             </div>
             <KakaoMap center={mapCenter} storeData={storeData} />
