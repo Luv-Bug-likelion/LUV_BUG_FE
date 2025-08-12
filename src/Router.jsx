@@ -5,6 +5,7 @@ import Guide from "./pages/guide/Guide";
 import Story from "./components/Story";
 import Budget from "./pages/budget/Budget";
 import Sijang from "./components/Sijang";
+import Loading from "./pages/loading/Loading";
 
 const Router = () => (
   <BrowserRouter>
@@ -15,6 +16,7 @@ const Router = () => (
       <Route path="/story" element={<Story />} />
       <Route path="/map" element={<MarketMap />} />
       <Route path="/sijang" element={<Sijang />} />
+      <Route path="/loading" element={<Loading />} />
     </Routes>
   </BrowserRouter>
 );
