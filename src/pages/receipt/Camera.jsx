@@ -292,7 +292,6 @@ const handleUserMedia = () => {
       {capturedImageSrc ? (
         <img src={capturedImageSrc} alt="캡처된 영수증" className="captured-image" />
       ) : (
-        activeDeviceId && (
           <Webcam
             audio={false}
             ref={webcamRef}
@@ -305,7 +304,6 @@ const handleUserMedia = () => {
               setIsLoading(false);
             }}
           />
-        )
       )}
 
       {/* --- 분석 중 오버레이 --- */}
