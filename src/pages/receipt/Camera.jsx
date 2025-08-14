@@ -167,7 +167,7 @@ const Camera = () => {
       };
 
       // 에러가 발생해도 캡처한 이미지와 Mock 데이터를 가지고 다음 페이지로 이동
-      navigate('/receiptcheck', {
+      navigate('/checksuccess', {
         state: {
           result: mockResult, // 가상 결과 데이터 전달
           capturedImage: imageSrc // 캡처한 고화질 이미지 전달

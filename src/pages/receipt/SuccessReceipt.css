@@ -44,6 +44,8 @@ html, body, #root {
 .receiptimg{
     width: 54px;
     height: 54px;
+    max-width: 54px;
+    max-height: 54px;
     border-radius: 4px;
     border-color: none;
 }
