@@ -5,6 +5,8 @@ import Guide from "./pages/guide/Guide";
 import Story from "./components/Story";
 import Budget from "./pages/budget/Budget";
 import Sijang from "./components/Sijang";
+import Camera from "./pages/receipt/Camera";
+import SuccessReceipt from "./pages/receipt/SuccessReceipt";
 
 const Router = () => (
   <BrowserRouter>
@@ -15,6 +17,9 @@ const Router = () => (
       <Route path="/story" element={<Story />} />
       <Route path="/map" element={<MarketMap />} />
       <Route path="/sijang" element={<Sijang />} />
+      
+      <Route path="/camera" element={<Camera />} />
+      <Route path="/checksuccess" element={<SuccessReceipt />} />
     </Routes>
   </BrowserRouter>
 );
