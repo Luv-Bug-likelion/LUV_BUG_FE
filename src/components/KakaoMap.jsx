@@ -113,7 +113,7 @@ const KakaoMap = ({ center, storeData }) => {
         };
     }, [center, storeData, KAKAO_JS_KEY]);
 
-    return <div ref={mapRef} style={{ width: "100%", height: "597px" }} />;
+    return <div ref={mapRef} className="kakaomap-container" style={{ width: "100%", height: "597px" }} />;
 };
 
 export default KakaoMap;
