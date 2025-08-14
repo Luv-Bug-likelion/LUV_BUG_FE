@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom'; // useLocation 추가
 import Webcam from 'react-webcam';
 import axios from 'axios';
@@ -22,6 +22,8 @@ const Camera = () => {
   const location = useLocation(); // location 객체 사용
   const webcamRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  const BACKEND_KEY = import.meta.env.VITE_BACKEND_DOMAIN_KEY
 
   // 이전 페이지에서 넘어온 mission_id 추출
   //const { mission_id } = location.state || {};
@@ -49,7 +51,7 @@ const Camera = () => {
 
     const timer = setTimeout(() => {
       setShowGuide(false);
-    }, 3000);
+    }, 1800);
     return () => clearTimeout(timer);
   }, [mission_id, navigate]);
 
@@ -111,8 +113,7 @@ const Camera = () => {
   const uploadImage = useCallback(async ({ file, imageSrc }) => {
     if (!file || !mission_id) return;
 
-    // 로컬 스토리지에서 userKey 가져오기
-    /*const userKey = localStorage.getItem('userKey');
+    /*API 완전해지면 실현할 코드(키 없으면 리다이렉트)
     if (!userKey) {
         alert("사용자 인증 정보가 없습니다. 다시 로그인해주세요.");
         setIsAnalyzing(false);
@@ -122,7 +123,15 @@ const Camera = () => {
         return;
     }*/
 
-    const { userKey } = mockData;
+    let userKey = localStorage.getItem('userKey');
+    if (!userKey) {
+      userKey = mockData.userKey;
+      console.log("로컬 스토리지에 userKey가 없어 목데이터를 사용합니다.");
+    } else {
+      console.log("로컬 스토리지에 있는 userKey를 사용합니다.");
+    }
+
+    console.log("최종 사용되는 userKey:", userKey);
 
     setIsAnalyzing(true); // '분석 중' 오버레이 표시
 
@@ -131,18 +140,19 @@ const Camera = () => {
     formData.append('mission_id', mission_id); // mission_id 추가
 
     try {
-      const response = await axios.post('YOUR_BACKEND_API_ENDPOINT', formData, {
+      const response = await axios.post(`${BACKEND_KEY}/mission/receiptcheck`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${userKey}` // 인증 헤더 추가
+          'userKey': `${userKey}`
         },
       });
+
 
       // 200 OK 응답 확인
       if (response.status === 200) {
         console.log('서버 응답:', response.data);
         // 응답 데이터와 고화질 이미지를 함께 다음 페이지로 전달
-        navigate('/recieptcheck', {
+        navigate('/checksuccess', {
           state: {
             result: response.data,
             capturedImage: imageSrc
@@ -250,7 +260,7 @@ const Camera = () => {
       {/* --- 오버레이 (로딩, 전환, 캡처 중) --- */}
       {(isLoading || isSwitching || isCapturing) && (
         <div className="processing-overlay">
-          {isLoading && <p>카메라 준비 중...</p>}
+          {isLoading && <p></p>}
         </div>
       )}
 
