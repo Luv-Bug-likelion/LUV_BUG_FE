@@ -81,10 +81,9 @@ const Camera = () => {
     }
   }, [setCameraIds]);
 
-  useEffect(() => {
-    console.log('[실행] useEffect에서 enumerateDevices 최초 호출');
-    //navigator.mediaDevices.enumerateDevices().then(handleDevices);
-  }, [handleDevices]);
+useEffect(() => {
+    console.log("페이지 로드. 이제 Webcam 컴포넌트가 권한을 요청할 것입니다.");
+}, []); // 최초 한 번만 실행되도록 의존성 배열을 비워둡니다.
 
   const handleSwitchCamera = () => {
     setIsSwitching(true);
@@ -97,13 +96,19 @@ const Camera = () => {
     }, 10);
   };
 
-  const handleUserMedia = () => {
-    console.log('✅ [성공] onUserMedia. 카메라 준비 완료.');
+const handleUserMedia = () => {
+    // 1. "허용"을 눌렀으므로 이 함수가 실행됩니다.
+    console.log('✅ [성공] onUserMedia. 카메라 권한 획득 완료!');
+
+    // 2. 가장 먼저 로딩 화면을 없애 카메라와 버튼을 보여줍니다.
     setIsLoading(false);
     setIsSwitching(false);
-    console.log('정확한 장치 목록을 얻기 위해 재조회합니다.');
+
+    // 3. 이제 권한이 확보된 상태이므로, 장치 목록을 조회합니다.
+    //    이제서야 비로소 정확한 deviceId가 담긴 목록을 얻을 수 있습니다.
+    console.log('정확한 장치 목록을 얻기 위해 enumerateDevices를 호출합니다.');
     navigator.mediaDevices.enumerateDevices().then(handleDevices);
-  };
+};
 
   const finalVideoConstraints = {
     ...lowResConstraints,
