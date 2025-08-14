@@ -158,6 +158,7 @@ const handleUserMedia = () => {
         },
       });
 
+
       // 200 OK 응답 확인
       if (response.status === 200) {
         console.log('서버 응답:', response.data);
