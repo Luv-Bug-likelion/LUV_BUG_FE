@@ -1,4 +1,3 @@
-/* MarketMap.css */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -10,53 +9,56 @@
   align-items: center;
   justify-content: center;
 }
+
 .modal-body {
   width: 332px;
-  height: 506px;
-  overflow: auto;
+  max-height: 506px;
+  overflow-y: auto;
   background: #f8f7fd;
   border-radius: 16px;
   border: 3px solid #00000033;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
   padding: 20px;
+  padding-right: 13px;
   scrollbar-gutter: stable both-edges;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: #d7dbe0 transparent;
-}
-.modal-body::-webkit-scrollbar {
-  width: 6px; /* 얇게 */
-}
-.modal-body::-webkit-scrollbar-track {
-  background: transparent;
-  margin: 8px 0; /* 위·아래 여백으로 pill 느낌 */
-}
-.modal-body::-webkit-scrollbar-thumb {
-  background: #d7dbe0; /* 기본 색 */
-  border-radius: 999px; /* 완전 둥글게 */
-  border: 2px solid transparent; /* 시각적 여백 */
-  background-clip: padding-box;
-}
-.modal-body:hover::-webkit-scrollbar-thumb {
-  background: #c2c7cd; /* 호버 시 살짝 진하게 */
-}
-.modal-body::-webkit-scrollbar-thumb:active {
-  background: #9aa0a6; /* 드래그 시 더 진하게 */
 }
 
-/* Mission 내부 박스 */
-.mission-box {
-  width: 290px;
-  min-height: 74px;
-  background: white;
-  border-radius: 16px;
-  padding-bottom: 30px;
+.modal-body::-webkit-scrollbar {
+  width: 3px !important;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 6px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background-color: #d7dbe0;
+  border-radius: 3px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0;
+}
+
+/* 파이어폭스용 */
+.modal-body {
+  scrollbar-width: thin; /* 얇게 */
+  scrollbar-color: #d7dbe0 transparent;
+}
+
+.mission-list {
+  padding-right: 0;
 }
 
 .mission-close {
   color: #a19ea5;
   text-align: right;
 }
+
 .mission-mascot {
   display: block;
   margin: 8px auto 12px;
@@ -64,8 +66,80 @@
   width: auto;
 }
 
+.mission-title-large {
+  font-size: 20px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.mission-subtitle {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.mission-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 6px;
+  background: #f8f7fd; /* 카드와 동일한 배경 */
+  overflow: auto;
+}
+
+.mission-item {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #fff;
+  overflow: hidden;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.mission-item:focus,
+.mission-item:active,
+.mission-item *:focus,
+.mission-item *:active {
+  outline: none;
+  background: none;
+}
+
+/* 카드 레이아웃 */
+.mission-card {
+  display: flex;
+  align-items: flex-end; /* 버튼 하단 고정 */
+  justify-content: space-between;
+  padding: 14px 16px;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 텍스트 영역 */
+.mission-card-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mission-title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.mission-desc {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #111111;
+  margin-bottom: 0;
+  white-space: pre-line;
+}
+
 .receipt-badge {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -83,64 +157,23 @@
   user-select: none;
   cursor: pointer;
   overflow: hidden;
-  justify-self: end;
-  margin-right: 9px;
-  margin-bottom: 18px;
-  word-break: keep-all; /*영수증 줄바끔 이슈*/
-  overflow-wrap: normal;
-  transform: translateY(0.5px);
+  margin-bottom: 2px; /* 버튼 아래 여유 */
+  white-space: nowrap; /* 필요 시 줄바꿈 제한 */
 }
+
+.receipt-badge:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+}
+
 .receipt-badge.verified {
   border-color: #c5c6cb;
-  color: #807f85;
   color: transparent;
   background-image: url("../assets/미션클리어.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 130%;
-}
-.receipt-badge.verified::after {
-  box-shadow: 0 0 0 3px #2e7d32;
-}
-.stamp {
-  width: 10px;
-  height: 38px;
-}
-
-.mission-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px; /* 카드 사이 간격 */
-  margin: 0;
-  padding: 6px;
-}
-
-.mission-item {
-  background: #fff;
-  border-radius: 14px;
-  border: 1px solid #eaeaea;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-  overflow: hidden;
-}
-.mission-card-text {
-  display: grid;
-  row-gap: 8px;
-  min-width: 0;
-  padding-left: 10px;
-  padding-top: 16px;
-}
-
-.mission-title {
-  font-size: 16px;
-  font-weight: 800;
-  line-height: 1.3;
-}
-
-.mission-desc {
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.45;
-  color: #444;
 }
 
 .mission-btn {
@@ -150,37 +183,9 @@
   background-color: black;
   border-radius: 8px;
   display: block;
-
-  margin: 28px 49px 21px 49px;
+  margin: 28px auto 21px;
 }
 
-.mission-title-large {
-  font-size: 20px;
-  font-weight: 800px;
-  text-align: center;
-}
-.mission-subtitle {
-  font-size: 12px;
-  font-weight: 600px;
-  text-align: center;
-}
-
-.modal-body::-webkit-scrollbar {
-  width: 6px;
-}
-
-.modal-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.modal-body::-webkit-scrollbar-thumb {
-  background-color: #c1c1c1;
-  border-radius: 10px;
-}
-
-.modal-body::-webkit-scrollbar-thumb:hover {
-  background-color: #a0a0a0;
-}
 .mission-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -193,7 +198,25 @@
   color: #666;
   text-align: center;
 }
-.mission-subtitle,
-.mission-desc {
-  white-space: pre-line;
+
+.custom-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #ccc #f0f0f0;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
 }
