@@ -83,7 +83,7 @@ const Camera = () => {
 
   useEffect(() => {
     console.log('[실행] useEffect에서 enumerateDevices 최초 호출');
-    navigator.mediaDevices.enumerateDevices().then(handleDevices);
+    //navigator.mediaDevices.enumerateDevices().then(handleDevices);
   }, [handleDevices]);
 
   const handleSwitchCamera = () => {
@@ -101,6 +101,8 @@ const Camera = () => {
     console.log('✅ [성공] onUserMedia. 카메라 준비 완료.');
     setIsLoading(false);
     setIsSwitching(false);
+    console.log('정확한 장치 목록을 얻기 위해 재조회합니다.');
+    navigator.mediaDevices.enumerateDevices().then(handleDevices);
   };
 
   const finalVideoConstraints = {
