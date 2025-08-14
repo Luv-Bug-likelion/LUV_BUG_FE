@@ -39,7 +39,7 @@ const SuccessReceipt = () => {
       <hr style={{width: '90%', height:'2px', backgroundColor:'#AAA', marginTop:'22px'}}/>
       <div className="amount-container">
         <p style={{ color: '#111', fontSize: '18px', fontWeight:'500' }}>합계</p>
-        <p style={{ color: '#C46D48', fontSize: '20px', fontWeight:'500' }}>{state.result.totalPrice}원</p>
+        <p style={{ color: '#C46D48', fontSize: '20px', fontWeight:'500' }}>{state.result.totalPrice.toLocaleString()}원</p>
       </div>
       <hr style={{width:'90%', height:'2px', backgroundColor:'#F2F2F2', marginTop:'15px'}}/>
       <div className="notice">영수증에서 인식한 정보입니다</div>
