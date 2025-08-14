@@ -42,6 +42,7 @@ const Camera = () => {
   const [cameraIds, setCameraIds] = useState({ front: null, back: null });
   const [activeDeviceId, setActiveDeviceId] = useState(null);
 
+  console.log('--- [상태 체크] ---', { isLoading, activeDeviceId, isAnalyzing, isCapturing });
   useEffect(() => {
     // mission_id가 없는 비정상적인 접근 처리
     if (!mission_id) {
@@ -61,6 +62,7 @@ const Camera = () => {
 
   const handleDevices = useCallback((mediaDevices) => {
     const videoDevices = mediaDevices.filter(({ kind }) => kind === "videoinput");
+    console.log('[실행] handleDevices. 찾은 비디오 장치:', videoDevices);
     const front = videoDevices.find(device =>
       device.label.toLowerCase().includes('front') || device.label.toLowerCase().includes('전면')
     );
@@ -80,6 +82,7 @@ const Camera = () => {
   }, [setCameraIds]);
 
   useEffect(() => {
+    console.log('[실행] useEffect에서 enumerateDevices 최초 호출');
     navigator.mediaDevices.enumerateDevices().then(handleDevices);
   }, [handleDevices]);
 
@@ -95,6 +98,7 @@ const Camera = () => {
   };
 
   const handleUserMedia = () => {
+    console.log('✅ [성공] onUserMedia. 카메라 준비 완료.');
     setIsLoading(false);
     setIsSwitching(false);
   };
@@ -205,6 +209,7 @@ const Camera = () => {
   };
 
   const captureAndProcess = useCallback(async () => {
+    console.log('[실행] captureAndProcess. 캡처 시작.');
     if (!webcamRef.current?.video?.srcObject) return;
 
     setIsCapturing(true);
