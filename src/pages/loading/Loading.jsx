@@ -1,4 +1,4 @@
-import loadingIcon from '../../assets/triangle.svg';
+import loadingIcon from '../../assets/loadingIcon.svg';
 import './Loading.css';
 
 const Loading = () => {
