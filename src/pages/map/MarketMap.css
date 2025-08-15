@@ -19,3 +19,77 @@
     align-items: center;
     gap: 2px;
 }
+
+.mission-board-button{
+    width: 118px;
+    height: 37px;
+    background-color: rgba(45, 46, 41, 0.90);
+    border-radius: 99px;
+    font-size: 12px;
+    color: #fff;
+}
+
+.store-list-container{
+    position: fixed;
+    bottom: 0;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 420px;
+    height: 302px;
+    z-index: 10;
+    background-color: #fff;
+}
+
+/* 각 가게 항목(li)에 대한 스타일 */
+.store-item {
+  border-bottom: 1px solid #f0f0f0; /* 항목을 구분하는 옅은 회색 줄 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 355px;
+}
+
+/* 가게 정보(이름, 주소 등)를 감싸는 div */
+.store-info {
+  flex-grow: 1;
+}
+
+/* 시장 이름 (추가됨) */
+.store-market-name {
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 0.25rem;
+}
+
+/* 가게 이름 (h3) */
+.store-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600; /* 조금 더 굵게 */
+  margin: 0;
+}
+
+/* 가게 주소 및 카테고리 (p) */
+.store-meta {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0.25rem 0 0 0;
+  display: flex;
+  align-items: center;
+}
+
+/* 상세보기 버튼 */
+.details-button {
+  background-color: #000; /* 어두운 배경색 */
+  color: white; /* 흰색 글씨 */
+  border: none;
+  border-radius: 12px; /* 둥근 모서리 */
+  width: 59px;
+  height: 24px;
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap; /* 버튼 글자 줄바꿈 방지 */
+}

@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
-import StoreBottomSheet from "../../components/StoreBottomSheet.jsx";
 import KakaoMap from "../../components/KakaoMap";
 import triangleIcon from "../../assets/triangle.svg";
 import Mission from "../../components/Mission.jsx";
+import StoreList from "../../components/StoreList.jsx";
 import "./MarketMap.css";
 
 const mockData = {
@@ -28,6 +28,12 @@ const mockData = {
   ],
 };
 
+const categoryKorean = {
+  meat: "육류",
+  vegetable: "채소",
+  fruit: "과일",
+};
+
 const MarketMap = () => {
   const mapCenter = { lat: 37.480701, lng: 126.8117 };
   const BACKEND_KEY = import.meta.env.VITE_BACKEND_DOMAIN_KEY;
@@ -35,6 +41,7 @@ const MarketMap = () => {
   const [storeData, setStoreData] = useState(null);
   const [missionOpen, setMissionOpen] = useState(false);
   const [counter, setCounter] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState("전체");
 
   useEffect(() => {
     const fetchStoreData = async () => {
@@ -42,7 +49,7 @@ const MarketMap = () => {
         const userKey = localStorage.getItem("userKey");
         if (!userKey) throw new Error("User key not found in localStorage");
 
-        const response = await axios.post(`${BACKEND_KEY}/story/location`, {
+        const response = await axios.post(`${BACKEND_KEY}/mission/stores`, {
           userKey: userKey,
         });
 
@@ -56,9 +63,19 @@ const MarketMap = () => {
     };
 
     fetchStoreData();
-  }, []);
+  }, [BACKEND_KEY]);
 
   console.log("[MarketMap] 렌더링 직전 storeData:", storeData);
+
+  const filteredStores = useMemo(() => {
+    if (!storeData) return []; // 데이터가 없으면 빈 배열 반환
+    if (selectedCategory === "전체") {
+      // '전체'일 경우 모든 카테고리의 점포를 하나의 배열로 합침
+      return Object.values(storeData).flat();
+    }
+    // 특정 카테고리가 선택된 경우 해당 점포 목록 반환
+    return storeData[selectedCategory] || [];
+  }, [storeData, selectedCategory]);
 
   return (
     <div>
@@ -66,33 +83,11 @@ const MarketMap = () => {
         <div className="header-contents">
           <p>역곡남부시장</p>
           <img src={triangleIcon} alt="Triangle" className="triangle-icon" />
-          <button
-            onClick={() => {
-              // 🔹 미션현황 버튼은 '열기만' 하도록 (여기서 +1 하지 않음)
-              setMissionOpen(true);
-            }}
-          >
-            미션현황({counter} / 5)
-          </button>
         </div>
       </div>
 
-      <KakaoMap center={mapCenter} storeData={storeData} />
 
-      <StoreBottomSheet>
-        <div>
-          <p>여기에 가게 정보 리스트가 들어옵니다.</p>
-          <div
-            style={{
-              height: "800px",
-              background: "#f0f0f0",
-              marginTop: "16px",
-            }}
-          >
-            가게 목록 바텀시트
-          </div>
-        </div>
-      </StoreBottomSheet>
+      <KakaoMap center={mapCenter} storeData={storeData} />
 
       {missionOpen && (
         <div className="modal-overlay" onClick={() => setMissionOpen(false)}>
@@ -108,6 +103,40 @@ const MarketMap = () => {
           </div>
         </div>
       )}
+
+      <button
+            onClick={() => {
+              // 🔹 미션현황 버튼은 '열기만' 하도록 (여기서 +1 하지 않음)
+              setMissionOpen(true);
+            }}
+            className="mission-board-button"
+          >
+            미션현황({counter} / 5)
+          </button>
+       <div className="store-list-container">
+        <div className="filter-buttons">
+          <button
+            onClick={() => setSelectedCategory("전체")}
+            className={selectedCategory === "전체" ? "active" : ""}
+          >
+            전체
+          </button>
+          {storeData && Object.keys(storeData).map((category) => (
+            <button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className={selectedCategory === category ? "active" : ""}
+            >
+              {categoryKorean[category] || category}
+            </button>
+          ))}
+        </div>
+        
+        {/* 🔹 2. 기존 ul 태그 대신 StoreList 컴포넌트를 사용하고, props로 데이터를 전달합니다. */}
+        <StoreList stores={filteredStores} />
+
+      </div>
+
     </div>
   );
 };
