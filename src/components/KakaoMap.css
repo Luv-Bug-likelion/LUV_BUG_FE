@@ -9,3 +9,8 @@
   text-align: center;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
+
+/* 브라우저의 핀치는 제한, 카카오맵은 별도 JS로 동작하여 영향을 주지 않는다 함*/
+.kakaomap-container{
+  touch-action: pan-x pan-y;
+}

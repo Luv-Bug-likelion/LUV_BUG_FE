@@ -6,6 +6,9 @@ import Story from "./components/Story";
 import Budget from "./pages/budget/Budget";
 import Sijang from "./components/Sijang";
 import Loading from "./pages/loading/Loading";
+import Camera from "./pages/receipt/Camera";
+import SuccessReceipt from "./pages/receipt/SuccessReceipt";
+
 
 const Router = () => (
   <BrowserRouter>
@@ -17,6 +20,8 @@ const Router = () => (
       <Route path="/map" element={<MarketMap />} />
       <Route path="/sijang" element={<Sijang />} />
       <Route path="/loading" element={<Loading />} />
+      <Route path="/camera" element={<Camera />} />
+      <Route path="/checksuccess" element={<SuccessReceipt />} />
     </Routes>
   </BrowserRouter>
 );

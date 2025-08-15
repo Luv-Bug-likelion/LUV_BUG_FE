@@ -1,0 +1,222 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-body {
+  width: 332px;
+  max-height: 506px;
+  overflow-y: auto;
+  background: #f8f7fd;
+  border-radius: 16px;
+  border: 3px solid #00000033;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  padding-right: 13px;
+  scrollbar-gutter: stable both-edges;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 3px !important;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 6px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background-color: #d7dbe0;
+  border-radius: 3px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0;
+}
+
+/* 파이어폭스용 */
+.modal-body {
+  scrollbar-width: thin; /* 얇게 */
+  scrollbar-color: #d7dbe0 transparent;
+}
+
+.mission-list {
+  padding-right: 0;
+}
+
+.mission-close {
+  color: #a19ea5;
+  text-align: right;
+}
+
+.mission-mascot {
+  display: block;
+  margin: 8px auto 12px;
+  height: 76px;
+  width: auto;
+}
+
+.mission-title-large {
+  font-size: 20px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.mission-subtitle {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.mission-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 6px;
+  background: #f8f7fd; /* 카드와 동일한 배경 */
+  overflow: auto;
+}
+
+.mission-item {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #fff;
+  overflow: hidden;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.mission-item:focus,
+.mission-item:active,
+.mission-item *:focus,
+.mission-item *:active {
+  outline: none;
+  background: none;
+}
+
+/* 카드 레이아웃 */
+.mission-card {
+  display: flex;
+  align-items: flex-end; /* 버튼 하단 고정 */
+  justify-content: space-between;
+  padding: 14px 16px;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 텍스트 영역 */
+.mission-card-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mission-title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.mission-desc {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #111111;
+  margin-bottom: 0;
+  white-space: pre-line;
+}
+
+.receipt-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px dotted #c8c8c8;
+  background: #fff;
+  color: #9aa0a6;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.05;
+  text-align: center;
+  user-select: none;
+  cursor: pointer;
+  overflow: hidden;
+  margin-bottom: 2px; /* 버튼 아래 여유 */
+  white-space: nowrap; /* 필요 시 줄바꿈 제한 */
+}
+
+.receipt-badge:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+}
+
+.receipt-badge.verified {
+  border-color: #c5c6cb;
+  color: transparent;
+  background-image: url("../assets/미션클리어.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 130%;
+}
+
+.mission-btn {
+  width: 194px;
+  height: 51px;
+  color: #ffffff66;
+  background-color: black;
+  border-radius: 8px;
+  display: block;
+  margin: 28px auto 21px;
+}
+
+.mission-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.3);
+}
+
+.mission-progress-hint {
+  margin: 12px auto 0;
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #ccc #f0f0f0;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
