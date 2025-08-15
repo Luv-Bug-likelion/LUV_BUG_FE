@@ -49,7 +49,7 @@ const MarketMap = () => {
         const userKey = localStorage.getItem("userKey");
         if (!userKey) throw new Error("User key not found in localStorage");
 
-        const response = await axios.post(`${BACKEND_KEY}/mission/stores`, {
+        const response = await axios.get(`${BACKEND_KEY}/mission/stores`, {
           userKey: userKey,
         });
 
