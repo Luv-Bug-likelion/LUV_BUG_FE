@@ -1,0 +1,46 @@
+.reward-page {
+  height: 840px;
+  width: 388px;
+  display: block;
+  padding: 20px;
+  text-align: center;
+}
+
+.reward-page h2 {
+  margin-top: 57px;
+}
+
+.reward-page RewardQR {
+  margin-top: 26px;
+}
+
+.reward-info {
+  width: 100%;
+  text-align: left;
+  display: block;
+  font-size: 14px;
+}
+
+.reward-give {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.reward-btn {
+  width: 340px;
+  height: 57px;
+  padding: 19px 126px 19px 126px;
+  color: white;
+  background-color: #000000;
+  border-radius: 8px;
+  margin-top: 37px;
+  margin-bottom: 150px;
+}
+
+.RewardQR {
+  width: 108px;
+  height: 108px;
+  object-fit: contain;
+  margin: 16px 0;
+}

@@ -174,7 +174,6 @@ function Mission({
         })}
       </div>
 
-      {/* 리워드 버튼 */}
       <button
         className="mission-btn"
         onClick={handleConfirm}
