@@ -1,7 +1,16 @@
+#app {
+  position: relative;
+  margin: 0 auto;
+  background-color: #ffffff;
+  height: 650px;
+}
+
 .header{
     width: 100%;
     height: 53px;
     background-color: #fff;
+    display: flex;
+    align-items: center;
 }
 
 .header p{
@@ -18,4 +27,209 @@
     margin-left: 20px;
     align-items: center;
     gap: 2px;
+}
+
+.store-content{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 55%;
+  z-index: 10;
+}
+
+.mission-board-button{
+    position: relative;
+    width: 118px;
+    height: 37px;
+    background-color: rgba(45, 46, 41, 0.90);
+    border-radius: 99px;
+    font-size: 12px;
+    color: #fff;
+    z-index: 30;
+    margin-bottom: 30px;
+    flex-shrink: 0;
+}
+
+.store-list-container{
+
+
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+.filter-container{
+  display: flex;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  white-space: nowrap;
+  height: 60px;
+  align-items: center;
+  width: 100%;
+  padding-left: 20px;
+  border-bottom: 2px solid #f2f2f2;
+  flex-shrink: 0;
+}
+
+.filter-button{
+  flex-shrink: 0;
+  margin-right: 5px;
+  color: #111;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  height: 30px;
+  line-height: 30px; /* height 값과 동일하게 설정 */
+  padding: 0 17px;
+  background-color: #fff;
+  border: 0.5px solid #C2C2C2;
+  border-radius: 99px;
+  cursor: pointer;
+}
+
+.filter-button.active{
+  background-color: #000;
+  color: #fff;
+  border: none;
+}
+.store-list{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  height: calc(100% - 60px);
+  padding: 0;
+  margin: 0;
+  padding-bottom: 10px;
+  width: 90%;
+  flex-shrink: 0;
+}
+
+.store-list::-webkit-scrollbar {
+ display: none; /* Chrome, Safari */
+}
+
+/* 각 가게 항목(li)에 대한 스타일 */
+.store-item {
+  border-bottom: 1px solid #f0f0f0; /* 항목을 구분하는 옅은 회색 줄 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  position: relative;
+}
+
+/* 가게 정보(이름, 주소 등)를 감싸는 div */
+.store-info {
+  flex-grow: 1;
+}
+
+/* 시장 이름 (추가됨) */
+.store-market-name {
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 0.25rem;
+}
+
+/* 가게 이름 (h3) */
+.store-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600; /* 조금 더 굵게 */
+  margin: 0;
+}
+
+/* 가게 주소 및 카테고리 (p) */
+.store-meta {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0.25rem 0 0 0;
+  display: flex;
+  align-items: center;
+}
+
+/* 상세보기 버튼 */
+.details-button {
+  background-color: #000; /* 어두운 배경색 */
+  color: white; /* 흰색 글씨 */
+  border: none;
+  border-radius: 12px; /* 둥근 모서리 */
+  width: 59px;
+  height: 24px;
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap; /* 버튼 글자 줄바꿈 방지 */
+}
+
+@media (max-width: 450px) {
+  #app {
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .store-content {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  .store-list {
+    padding-bottom: 60px;
+  }
+}
+
+.sub-info-container{
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+
+.close-modal {
+  position: absolute;
+  background: none;
+  border: none;
+  cursor: pointer;
+  right: 12px;
+  top: 10px;
+}
+
+.store-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 18px;
+}
+
+.store-item-modal {
+  position: absolute; /* 💡 부모인 .store-item을 기준으로 위치합니다. */
+  top: 0;
+  left: 0;
+  width: 100%; 
+  height: 90%; 
+  background-color: #f3f3f3;
+  border: none;
+  border-radius: 8px;
+  z-index: 20; /* 다른 요소 위에 보이도록 합니다. */
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-each-container {
+  display: flex;
+  align-items: center;
+  margin-top: 11px;
 }
