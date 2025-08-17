@@ -8,6 +8,8 @@ import Sijang from "./components/Sijang";
 import Loading from "./pages/loading/Loading";
 import Camera from "./pages/receipt/Camera";
 import SuccessReceipt from "./pages/receipt/SuccessReceipt";
+import Reward from "./pages/reward/Reward";
+import UsingReward from "./pages/reward/UsingReward";
 
 const Router = () => (
   <BrowserRouter>
@@ -21,6 +23,8 @@ const Router = () => (
       <Route path="/loading" element={<Loading />} />
       <Route path="/camera" element={<Camera />} />
       <Route path="/checksuccess" element={<SuccessReceipt />} />
+      <Route path="/reward" element={<Reward />} />
+      <Route path="/reward/use" element={<UsingReward />} />
     </Routes>
   </BrowserRouter>
 );
