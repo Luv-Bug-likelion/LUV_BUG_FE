@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./Budget.css";
 import mascot2 from "../../assets/한복핸썹여백없음.png";
 import Story from "../../components/Story";
@@ -18,8 +18,18 @@ const Budget = ({ budget, setBudget, onNext }) => {
   const [showSijang, setShowSijang] = useState(false); // 시장 모달
   const [marketId, setMarketId] = useState(null); // 선택된 시장
 
+  const [toastMsg, setToastMsg] = useState("");
+
   const navigate = useNavigate();
   const location = useLocation();
+
+  const bubbleText = useMemo(() => {
+    const msgs = [
+      "저와 함께 미션을 깨고, 리워드를 얻어봐요!",
+      "저는 부천 마스코트 핸썹이에요! 부천핸썹!",
+    ];
+    return msgs[Math.floor(Math.random() * msgs.length)];
+  }, []);
 
   useEffect(() => {
     if (location.state?.fromStory) {
@@ -28,32 +38,49 @@ const Budget = ({ budget, setBudget, onNext }) => {
     }
   }, [location.state]);
 
+  const handleBudgetChange = (e) => {
+    const onlyDigits = e.target.value.replace(/\D/g, ""); // 비숫자 제거
+    setBudgetFn(onlyDigits);
+  };
+
+  const showToast = (msg) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(""), 1800);
+  };
+  const isValidBudget = () => {
+    const n = Number(budgetVal);
+    return budgetVal.trim().length > 0 && Number.isFinite(n) && n > 0;
+  };
+
   const handleButtonClick = () => {
-    // 시장 단계면 라우팅 대신 모달 오픈 (팝업으로)
+    if (!isValidBudget()) {
+      showToast("예산을 입력해야 실행돼요.");
+      return;
+    }
+
+    // 시장 단계 모달 오픈
     if (marketStep) {
       setShowSijang(true);
       return;
     }
     // AI 미션 생성 단계
     if (!made) {
-      if (!budgetVal || !budgetVal.trim()) return;
       setMade(true);
       onNext?.(budgetVal);
       return;
     }
-    // 스토리 선택 단계 → 스토리 모달 오픈
+
+    // 스토리 선택 단계에서 스토리 모달 오픈
     setShowStory(true);
   };
 
-  // 스토리 모달에서 확인 눌렀을 때
+  // 스토리 모달에서 확인 눌렀을 때 상황
   const handleStorySelect = (id, fromStory) => {
     setStoryId(id);
     setShowStory(false);
-    // 모달 모드에선 바로 "시장 선택하기" 단계로
     if (fromStory) {
       setMarketStep(true);
     } else {
-      // 페이지 모드로 스토리 화면에 가고 싶을 때 사용(현재는 모달 플로우가 기본)
       navigate("/story", { state: { budget: budgetVal, storyId: id } });
     }
   };
@@ -68,27 +95,25 @@ const Budget = ({ budget, setBudget, onNext }) => {
     <div className={`budget-page ${showStory || showSijang ? "blur" : ""}`}>
       <h1>시장통</h1>
       <p>#시간 가는 줄 모르고 장 보며 통 크게 리워드 얻자!</p>
-
       <div>
-        <div className="speech-bubble">
-          저와 함께 미션을 깨고, 리워드를 얻어봐요!
-        </div>
+        <div className="speech-bubble">{bubbleText}</div>
         <div className="money-character">
           <img src={mascot2} alt="마스코트" className="character-img" />
         </div>
       </div>
-
+      // 숫자만 가능하게 한 코드
       <div className="budget-wrap">
         <input
           type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
           className="budget-box"
           value={budgetVal}
-          onChange={(e) => setBudgetFn(e.target.value)}
+          onChange={handleBudgetChange}
           placeholder=" 사용 가능한 예산을 입력해주세요"
         />
         <span className="won-adorn">원</span>
       </div>
-
       <button
         type="button"
         className="mission-button"
@@ -96,7 +121,6 @@ const Budget = ({ budget, setBudget, onNext }) => {
       >
         {buttonLabel}
       </button>
-      {/* 스토리 모달 */}
       {showStory && (
         <div className="modal-backdrop" onClick={() => setShowStory(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -108,7 +132,6 @@ const Budget = ({ budget, setBudget, onNext }) => {
           </div>
         </div>
       )}
-      {/* 시장 모달 */}
       {showSijang && (
         <div className="modal-backdrop" onClick={() => setShowSijang(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -122,6 +145,7 @@ const Budget = ({ budget, setBudget, onNext }) => {
           </div>
         </div>
       )}
+      {toastMsg && <div className="toast">{toastMsg}</div>}
     </div>
   );
 };
