@@ -4,19 +4,22 @@ import mascot2 from "../../assets/한복핸썹여백없음.png";
 import Story from "../../components/Story";
 import Sijang from "../../components/Sijang";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
+
+// ✅ env 상수 정의
+const BACKEND_KEY = import.meta.env.VITE_BACKEND_DOMAIN_KEY;
 
 const Budget = ({ budget, setBudget, onNext }) => {
-  // 프롭 없을 대비 폴백
   const [localBudget, setLocalBudget] = useState("");
   const budgetVal = budget ?? localBudget;
   const setBudgetFn = setBudget ?? setLocalBudget;
 
-  const [made, setMade] = useState(false); // AI 미션 생성 완료 여부
-  const [showStory, setShowStory] = useState(false); // 스토리 모달
-  const [storyId, setStoryId] = useState(null); // 선택된 스토리
-  const [marketStep, setMarketStep] = useState(false); // 버튼 "시장 선택하기" 단계
-  const [showSijang, setShowSijang] = useState(false); // 시장 모달
-  const [marketId, setMarketId] = useState(null); // 선택된 시장
+  const [made, setMade] = useState(false);
+  const [showStory, setShowStory] = useState(false);
+  const [storyId, setStoryId] = useState(null);
+  const [marketStep, setMarketStep] = useState(false);
+  const [showSijang, setShowSijang] = useState(false);
+  const [marketId, setMarketId] = useState(null);
 
   const [toastMsg, setToastMsg] = useState("");
 
@@ -39,7 +42,7 @@ const Budget = ({ budget, setBudget, onNext }) => {
   }, [location.state]);
 
   const handleBudgetChange = (e) => {
-    const onlyDigits = e.target.value.replace(/\D/g, ""); // 비숫자 제거
+    const onlyDigits = e.target.value.replace(/\D/g, "");
     setBudgetFn(onlyDigits);
   };
 
@@ -47,34 +50,52 @@ const Budget = ({ budget, setBudget, onNext }) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(""), 1800);
   };
+
   const isValidBudget = () => {
     const n = Number(budgetVal);
     return budgetVal.trim().length > 0 && Number.isFinite(n) && n > 0;
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
+    console.log("버튼 눌림");
+
     if (!isValidBudget()) {
       showToast("예산을 입력해야 실행돼요.");
       return;
     }
 
-    // 시장 단계 모달 오픈
     if (marketStep) {
       setShowSijang(true);
       return;
     }
-    // AI 미션 생성 단계
+
     if (!made) {
-      setMade(true);
-      onNext?.(budgetVal);
-      return;
+      try {
+        // ✅ 여기서 env 상수 사용
+        const res = await axios.post(`${BACKEND_KEY}/home`, {
+          market: marketId || "부천역곡남부시장",
+          budget: Number(budgetVal),
+          storyId: storyId ?? 1,
+        });
+
+        if (res.data.code === 200) {
+          console.log("스토리 생성 성공:", res.data.data);
+          setMade(true);
+          onNext?.(budgetVal);
+        } else {
+          showToast(
+            "스토리 생성 실패: " + (res.data?.message ?? "알 수 없는 오류")
+          );
+        }
+      } catch (err) {
+        console.error("API 호출 에러:", err);
+        showToast("서버 오류가 발생했어요.");
+      }
     }
 
-    // 스토리 선택 단계에서 스토리 모달 오픈
     setShowStory(true);
   };
 
-  // 스토리 모달에서 확인 눌렀을 때 상황
   const handleStorySelect = (id, fromStory) => {
     setStoryId(id);
     setShowStory(false);
@@ -101,7 +122,7 @@ const Budget = ({ budget, setBudget, onNext }) => {
           <img src={mascot2} alt="마스코트" className="character-img" />
         </div>
       </div>
-      // 숫자만 가능하게 한 코드
+
       <div className="budget-wrap">
         <input
           type="text"
@@ -137,9 +158,9 @@ const Budget = ({ budget, setBudget, onNext }) => {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <Sijang
               onSelect={(id) => {
+                console.log("시장 선택됨:", id);
                 setMarketId(id);
                 setShowSijang(false);
-                // navigate("/map", { state: { budget: budgetVal, storyId, marketId: id } });
               }}
             />
           </div>
