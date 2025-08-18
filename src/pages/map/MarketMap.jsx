@@ -15,12 +15,16 @@ const mockData = {
       address: "경기 부천시 소사구 괴안동 224-1",
       phoneNumber: "032-123-4567",
       industry: "정육점",
+      x: "126.812053188209",
+      y: "37.4822557893541"
     },
     {
       name: "상점 B 정육점",
       address: "경기 부천시 소사구 부광로16번길 33 1층",
       phoneNumber: "032-987-6543",
       industry: "정육점",
+      x: "126.812180546585",
+      y: "37.481648712744"
     },
   ],
   fish: [
@@ -29,12 +33,16 @@ const mockData = {
       address: "경기 부천시 소사구 괴안동 224-1",
       phoneNumber: "032-123-4567",
       industry: "수산물 가게",
+      x: "126.812053188209",
+      y: "37.4822557893541"
     },
     {
       name: "상점 D 정육점",
       address: "경기 부천시 소사구 부광로16번길 33 1층",
       phoneNumber: "032-987-6543",
       industry: "수산물 가게",
+      x: "126.811537497798",
+      y: "37.4825304059129"
     },
   ],
   vegetable: [
@@ -43,6 +51,8 @@ const mockData = {
       address: "경기 부천시 소사구 경인로498번길 26 역곡남부시장",
       phoneNumber: "032-111-2222",
       industry: "체소 가게",
+      x: "126.811537497798",
+      y: "37.4825304059129"
     },
   ],
   fruit: [
@@ -51,12 +61,16 @@ const mockData = {
       address: "경기 부천시 소사구 괴안동 224-1",
       phoneNumber: "032-123-4567",
       industry: "과일 가게",
+      x: "126.812053188209",
+      y: "37.4822557893541"
     },
     {
       name: "상점 G 정육점",
       address: "경기 부천시 소사구 부광로16번길 33 1층",
       phoneNumber: "032-987-6543",
       industry: "과일 가게",
+      x: "126.812053188209",
+      y: "37.4822557893541"
     },
   ],
   
@@ -72,7 +86,7 @@ const categoryKorean = {
 const excludedKeys = ["marketName", "signPost"];
 
 const MarketMap = () => {
-  const mapCenter = { lat: 37.480701, lng: 126.8117 };
+  const [mapCenter, setMapCenter] = useState({ lat: 37.482, lng: 126.8117 });
   const BACKEND_KEY = import.meta.env.VITE_BACKEND_DOMAIN_KEY;
 
   const [storeData, setStoreData] = useState(null);
@@ -103,6 +117,36 @@ const MarketMap = () => {
 
     fetchStoreData();
   }, [BACKEND_KEY]);
+
+  useEffect(() => {
+    if (!storeData) return;
+
+    // 'marketName', 'signPost'를 제외한 모든 상점 데이터를 하나의 배열로 합칩니다.
+    const allStores = Object.keys(storeData)
+      .filter(key => !excludedKeys.includes(key))
+      .flatMap(key => storeData[key]);
+
+    // 상점 데이터가 없으면 아무 작업도 하지 않습니다.
+    if (allStores.length === 0) return;
+
+    let totalLat = 0;
+    let totalLng = 0;
+
+    // 모든 상점의 위도(y)와 경도(x)를 합산합니다.
+    allStores.forEach(store => {
+      // 좌표값이 문자열일 수 있으므로 숫자로 변환합니다.
+      totalLat += parseFloat(store.y);
+      totalLng += parseFloat(store.x);
+    });
+    
+    // 평균값을 계산합니다.
+    const avgLat = totalLat / allStores.length;
+    const avgLng = totalLng / allStores.length;
+    
+    // 계산된 평균값으로 지도 중심 state를 업데이트합니다.
+    setMapCenter({ lat: avgLat, lng: avgLng });
+
+  }, [storeData]); // storeData가 변경될 때마다 이 effect가 실행됩니다.
 
   const mapData = useMemo(() => {
     if (!storeData) return null;
