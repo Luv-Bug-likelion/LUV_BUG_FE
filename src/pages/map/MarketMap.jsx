@@ -4,6 +4,7 @@ import KakaoMap from "../../components/KakaoMap";
 import triangleIcon from "../../assets/triangle.svg";
 import Mission from "../../components/Mission.jsx";
 import StoreList from "../../components/StoreList.jsx";
+import Explain from "../../components/Explain.jsx";
 import "./MarketMap.css";
 
 const mockData = {
@@ -94,6 +95,9 @@ const MarketMap = () => {
   const [counter, setCounter] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState("전체");
 
+  const [isExplainModalOpen, setIsExplainModalOpen] = useState(false);
+  const [modalData, setModalData] = useState(null);
+
   useEffect(() => {
     const fetchStoreData = async () => {
       try {
@@ -115,7 +119,42 @@ const MarketMap = () => {
       }
     };
 
+    const fetchModalData = async () => {
+      try {
+        const userKey = localStorage.getItem("userKey");
+        if (!userKey) throw new Error("User key not found in localStorage");
+
+        const response = await axios.get(`${BACKEND_KEY}/스토리접근URI`, {
+          headers: {
+            'userKey': userKey
+          }
+        });
+        sessionStorage.setItem('explained', 'true');
+
+        setModalData(response.data); // 받아온 데이터를 state에 저장
+        setIsExplainModalOpen(true); // 데이터 로딩 성공 후 모달을 열도록 설정
+      } catch (error) {
+        console.error("Modal API 요청 실패:", error);
+        // 모달 데이터 로딩 실패 시에는 모달을 띄우지 않습니다.
+
+        const mockModalData = {
+          explain: "이것은 API 연동 실패 시 나타나는 목업 데이터입니다. 여기서 디자인을 확인하세요."
+        };
+
+        // ✨ 2. API가 성공했을 때와 동일한 로직을 실행해 모달을 띄웁니다.
+        console.log("목데이터로 모달을 띄웁니다.");
+        sessionStorage.setItem('explained', 'true'); // 방문 기록 저장
+        setModalData(mockModalData); // 목데이터로 상태 설정
+        setIsExplainModalOpen(true);  // 모달 열기
+      }
+    };
+
     fetchStoreData();
+
+    const explainModalShown = sessionStorage.getItem('explained');
+    if (!explainModalShown) {
+      fetchModalData(); // 최초 방문 시에만 모달 데이터 요청
+    }
   }, [BACKEND_KEY]);
 
   useEffect(() => {
@@ -169,6 +208,12 @@ const MarketMap = () => {
 
   return (
     <div>
+      <Explain
+        isOpen={isExplainModalOpen}
+        onClose={() => setIsExplainModalOpen(false)}
+        data={modalData}
+      />
+
       <div className="header">
         <div className="header-contents">
           <p>{storeData?.marketName}</p>
