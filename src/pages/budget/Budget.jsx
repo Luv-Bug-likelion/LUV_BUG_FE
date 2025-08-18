@@ -6,17 +6,20 @@ import Sijang from "../../components/Sijang";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
+// ✅ env 상수 정의
+const BACKEND_KEY = import.meta.env.VITE_BACKEND_DOMAIN_KEY;
+
 const Budget = ({ budget, setBudget, onNext }) => {
   const [localBudget, setLocalBudget] = useState("");
   const budgetVal = budget ?? localBudget;
   const setBudgetFn = setBudget ?? setLocalBudget;
 
-  const [made, setMade] = useState(false); // AI 미션 생성 완료 여부
-  const [showStory, setShowStory] = useState(false); // 스토리 모달
-  const [storyId, setStoryId] = useState(null); // 선택된 스토리
-  const [marketStep, setMarketStep] = useState(false); // 버튼 "시장 선택하기" 단계
-  const [showSijang, setShowSijang] = useState(false); // 시장 모달
-  const [marketId, setMarketId] = useState(null); // 선택된 시장
+  const [made, setMade] = useState(false);
+  const [showStory, setShowStory] = useState(false);
+  const [storyId, setStoryId] = useState(null);
+  const [marketStep, setMarketStep] = useState(false);
+  const [showSijang, setShowSijang] = useState(false);
+  const [marketId, setMarketId] = useState(null);
 
   const [toastMsg, setToastMsg] = useState("");
 
@@ -39,7 +42,7 @@ const Budget = ({ budget, setBudget, onNext }) => {
   }, [location.state]);
 
   const handleBudgetChange = (e) => {
-    const onlyDigits = e.target.value.replace(/\D/g, ""); // 비숫자 제거
+    const onlyDigits = e.target.value.replace(/\D/g, "");
     setBudgetFn(onlyDigits);
   };
 
@@ -68,7 +71,8 @@ const Budget = ({ budget, setBudget, onNext }) => {
 
     if (!made) {
       try {
-        const res = await axios.post("https://luvbug.shop/home", {
+        // ✅ 여기서 env 상수 사용
+        const res = await axios.post(`${BACKEND_KEY}/home`, {
           market: marketId || "부천역곡남부시장",
           budget: Number(budgetVal),
           storyId: storyId ?? 1,
