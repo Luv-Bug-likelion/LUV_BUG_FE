@@ -1,3 +1,18 @@
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: #d9d9d9;
+}
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 @font-face {
   font-family: "BMEuljiro10yearslater";
   src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/BMEuljiro10yearslater.woff")
@@ -6,43 +21,35 @@
   font-style: normal;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-/* 페이지 */
 .budget-page {
   position: relative;
-  height: 840px;
   width: 388px;
-  margin-top: 58px;
-  padding: 30px 16px 28px;
-  background: url("../../assets/시장배경.png") center 100px / cover no-repeat;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 16px 28px;
+  background: url("../../assets/시장배경.png") center 100px / cover no-repeat,
+    white;
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow: hidden;
 }
-
 .budget-page h1 {
+  margin: 71px 0 12px;
   font-size: 32px;
   color: #284a3b;
-  margin: 71px 0 16px;
   font-family: "BMEuljiro10yearslater", sans-serif;
   text-align: center;
 }
 
 .budget-page p {
+  margin: 0 0 24px;
   font-size: 12px;
   color: #9b9b9e;
-  margin: 0 0 111px;
   font-family: "BMEuljiro10yearslater", sans-serif;
   text-align: center;
 }
 
-/* 말풍선 */
 .speech-bubble {
   position: relative;
   display: block;
@@ -57,6 +64,7 @@
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
   font-size: 12px;
 }
+
 .speech-bubble::after {
   content: "";
   position: absolute;
@@ -68,7 +76,6 @@
   border-color: #fff transparent transparent transparent;
 }
 
-/* 캐릭터 */
 .character-img {
   width: 172px;
   height: 232px;
@@ -76,7 +83,6 @@
   pointer-events: none;
 }
 
-/* 입력 */
 .budget-wrap {
   position: relative;
   width: 356px;
@@ -112,8 +118,6 @@
 .budget-wrap .budget-box:not(:placeholder-shown) ~ .won-adorn {
   display: block;
 }
-
-/* 버튼 */
 .mission-button {
   width: 232px;
   height: 52px;
@@ -151,4 +155,22 @@
   max-height: 80vh;
   overflow: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  top: 80%;
+  transform: translateX(-50%);
+  max-width: 356px;
+  max-height: 51px;
+  padding: 12px 16px;
+  background: #939393d9;
+  color: #fff;
+  border-radius: 14px;
+  text-align: center;
+  line-height: 1.4;
+  font-size: 14px;
+  z-index: 10000;
+  backdrop-filter: blur(2px);
 }
