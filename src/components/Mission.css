@@ -220,3 +220,7 @@
 .custom-scrollbar::-webkit-scrollbar-track {
   background-color: #f0f0f0;
 }
+
+.mission-subtitle {
+  white-space: pre-line;
+}
