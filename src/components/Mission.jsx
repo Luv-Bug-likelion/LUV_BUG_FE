@@ -120,6 +120,7 @@ function Mission({
         }
 
         const missionRes = await apiGetMission();
+        console.log(유저키, userKey);
         console.log("[Mission] /mission 응답:", missionRes.data);
       } catch (e) {
         console.error("[Mission] 초기화 실패:", e?.response?.data || e);

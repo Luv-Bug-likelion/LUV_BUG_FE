@@ -49,8 +49,9 @@
   user-select: none;
 }
 .sijang-cell:hover {
-  color: #284a3b;
+  color: #7066ff;
 }
+
 .sijang-cell.active {
   color: #7066ff;
 }

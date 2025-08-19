@@ -114,6 +114,7 @@ body {
   pointer-events: none;
   display: none;
 }
+
 .budget-wrap:focus-within .won-adorn,
 .budget-wrap .budget-box:not(:placeholder-shown) ~ .won-adorn {
   display: block;
@@ -140,7 +141,7 @@ body {
   inset: 0; /* top/right/bottom/left: 0 */
   background: rgba(0, 0, 0, 0.3); /* 살짝 어둡게 + 투명해야 blur가 보임 */
   backdrop-filter: blur(6px); /* 핵심! */
-  -webkit-backdrop-filter: blur(6px); /* 사파리 대응 */
+  -webkit-backdrop-filter: blur(6px);
   z-index: 1000;
 
   display: grid;
@@ -173,4 +174,16 @@ body {
   font-size: 14px;
   z-index: 10000;
   backdrop-filter: blur(2px);
+}
+
+.mission-button.market {
+  background: #ffffff;
+  color: black;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mission-button.market:hover {
+  background: #ffffff;
+  color: black;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
