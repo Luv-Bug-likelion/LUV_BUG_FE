@@ -42,7 +42,7 @@ const categoryKorean = {
   meat: "육류",
   vegetable: "채소",
   fruit: "과일",
-  fish:"수산물",
+  fish: "수산물",
 };
 
 const excludedKeys = ["marketName", "signPost"];
@@ -67,8 +67,8 @@ const MarketMap = () => {
 
         const response = await axios.get(`${BACKEND_KEY}/mission/stores`, {
           headers: {
-            'userKey': userKey
-          }
+            userKey: userKey,
+          },
         });
 
         setStoreData(response.data.data);
@@ -166,7 +166,6 @@ const MarketMap = () => {
     return storeData[selectedCategory] || [];
   }, [storeData, selectedCategory]);
 
-
   return (
     <div>
       <Explain
@@ -181,7 +180,6 @@ const MarketMap = () => {
           <img src={triangleIcon} alt="Triangle" className="triangle-icon" />
         </div>
       </div>
-
 
       <KakaoMap center={mapCenter} storeData={mapData} />
 
@@ -201,44 +199,48 @@ const MarketMap = () => {
       )}
       <div className="store-content">
         <button
-              onClick={() => {
-                // 🔹 미션현황 버튼은 '열기만' 하도록 (여기서 +1 하지 않음)
-                setMissionOpen(true);
-              }}
-              className="mission-board-button"
-            >
-              미션현황({counter} / 5)
-            </button>
+          onClick={() => {
+            // 🔹 미션현황 버튼은 '열기만' 하도록 (여기서 +1 하지 않음)
+            setMissionOpen(true);
+          }}
+          className="mission-board-button"
+        >
+          미션현황({counter} / 5)
+        </button>
         <div className="store-list-container">
           <div className="filter-container">
             <button
               onClick={() => setSelectedCategory("전체")}
-              className={`filter-button ${selectedCategory === '전체' ? 'active' : ''}`}
+              className={`filter-button ${
+                selectedCategory === "전체" ? "active" : ""
+              }`}
             >
               전체
             </button>
-            {storeData && Object.keys(storeData)
-              .filter((key) => !excludedKeys.includes(key))
-              .map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`filter-button ${selectedCategory === category ? 'active' : ''}`}
-              >
-                {categoryKorean[category] || category}
-              </button>
-            ))}
+            {storeData &&
+              Object.keys(storeData)
+                .filter((key) => !excludedKeys.includes(key))
+                .map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`filter-button ${
+                      selectedCategory === category ? "active" : ""
+                    }`}
+                  >
+                    {categoryKorean[category] || category}
+                  </button>
+                ))}
           </div>
-          
+
           {/* 🔹 2. 기존 ul 태그 대신 StoreList 컴포넌트를 사용하고, props로 데이터를 전달합니다. */}
           <StoreList
             stores={filteredStores}
             marketName={storeData?.marketName}
-            signPost={storeData?.signPost} />
-
+            signPost={storeData?.signPost}
+          />
         </div>
       </div>
-
     </div>
   );
 };

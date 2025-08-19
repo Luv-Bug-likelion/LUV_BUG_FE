@@ -1,90 +1,123 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import "./Mission.css";
 import mascot from "../assets/한복핸썹여백없음.png";
+import axios from "axios";
 
-function Mission({
-  missions,
-  onSelect,
-  onClose,
-  onReward,
-  onReceipt,
-  refetchMissions,
-  header = {
-    title: "미션 진행중!",
-    desc: "“엄마가 오징어 볶음 재료를 사오래요”\n핸썹이와 재료를 구매하세요",
-  },
-}) {
+// --- Axios 기본 설정 ---
+const BASE = (import.meta.env.VITE_BACKEND_DOMAIN_KEY || "").replace(
+  /\/+$/,
+  ""
+);
+axios.defaults.baseURL = BASE;
+axios.defaults.withCredentials = true;
+
+// --- API 요청 함수들 ---
+async function apiGetMission() {
+  const userKey = localStorage.getItem("userKey");
+  if (!userKey) {
+    // userKey가 없으면 요청을 보내지 않고 에러를 발생시킴
+    throw new Error("userKey가 없습니다. 먼저 로그인을 해주세요.");
+  }
+  return axios.get("/mission", {
+    headers: {
+      userKey: userKey,
+    },
+  });
+}
+
+async function apiUploadReceipt({ missionId, file }) {
+  const fd = new FormData();
+  fd.append("missionId", Number(missionId));
+  fd.append("image", file);
+
+  return axios.post("/mission/status", fd, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+}
+
+async function apiGetReward() {
+  return axios.get("/reward", {
+    headers: { Accept: "application/json" },
+  });
+}
+
+
+// --- Mission 컴포넌트 ---
+function Mission({ onSelect, onClose, onReward, onReceipt, refetchMissions }) {
   const MIN_FOR_REWARD = 3;
 
-  const fallbackItems = [
-    {
-      id: 1,
-      title: "평균가격 : 4,000 원",
-      desc: "역곡 남부시장에서 양파 구매하기",
-      step_code: "4.1",
-      is_successed: 0,
-    },
-    {
-      id: 2,
-      title: "평균가격 : 4,400 원",
-      desc: "역곡 남부 시장에서 고춧가루 구매하기",
-      step_code: "4.1",
-      is_successed: 0,
-    },
-    {
-      id: 3,
-      title: "평균가격 : 4,400 원",
-      desc: "역곡 남부 시장에서 고등어 사기",
-      step_code: "4.1",
-      is_successed: 0,
-    },
-    {
-      id: 4,
-      title: "평균가격 : 5,000 원",
-      desc: "역곡 남부시장에서 양파 구매하기",
-      step_code: "4.1",
-      is_successed: 0,
-    },
-    {
-      id: 5,
-      title: "평균가격 : 3,600 원",
-      desc: "역곡 남부 시장에서 고춧가루 구매하기",
-      step_code: "4.1",
-      is_successed: 0,
-    },
-  ];
-
-  // 실제 mission 데이터 or fallback
-  const sourceList =
-    Array.isArray(missions) && missions.length > 0 ? missions : fallbackItems;
+  const [sourceList, setSourceList] = useState([]);
+  const [header, setHeader] = useState({
+    title: "미션 진행중!",
+    desc: "미션을 불러오는 중입니다...", // 초기 로딩 메시지
+  });
   const [selected, setSelected] = useState(null);
+  const [pendingMission, setPendingMission] = useState(null);
+  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const missionRes = await apiGetMission();
+        console.log("[Mission] /mission 응답:", missionRes.data);
+
+        const missionData = missionRes.data?.data;
+        if (missionData && missionData.missionList) {
+          // 헤더 설명 업데이트
+          setHeader((prevHeader) => ({
+            ...prevHeader,
+            desc: `“${missionData.missionTitle}”\n핸썹이와 재료를 구매하세요`,
+          }));
+
+          // 미션 목록 데이터 가공 및 상태 업데이트
+          const formattedMissions = missionData.missionList.map((item) => ({
+            id: item.missionId,
+            title: `평균가격 : ${item.expectedPrice.toLocaleString()} 원`,
+            desc: item.missionDetail,
+            is_successed: Number(item.is_success), // boolean을 숫자로 변환 (true=1, false=0)
+          }));
+          setSourceList(formattedMissions);
+        }
+      } catch (e) {
+        console.error("[Mission] 초기화 실패:", e?.response?.data || e);
+        alert(e.message || "미션을 불러오는 데 실패했습니다.");
+        setHeader((prevHeader) => ({
+          ...prevHeader,
+          desc: "미션을 불러오는 데 실패했습니다.",
+        }));
+      }
+    })();
+  }, []);
 
   // 완료한 미션 개수
   const completedCount = sourceList.filter(
-    (m) => Number(m.is_successed) === 1
+    (m) => m.is_successed === 1
   ).length;
 
   // 리워드 가능 여부
   const canClaimReward = completedCount >= MIN_FOR_REWARD;
 
-  // 총소비액 로직
+  // 총 사용 금액 계산 (레거시 코드 호환)
   const totalSpent = sourceList
-    .filter((m) => Number(m.is_successed) === 1)
-    .reduce((sum, m) => {
-      const price = Number(m.title.replace(/[^0-9]/g, "")) || 0;
-      return sum + price;
-    }, 0);
-
-  // 리워드 금액 계산 로직 추가 10%~20%
+    .filter((m) => m.is_successed === 1)
+    .reduce((sum, m) => sum + (Number(m.title.replace(/[^0-9]/g, "")) || 0), 0);
+  
   const rewardAmount = canClaimReward ? Math.floor(totalSpent * 0.1) : 0;
 
-  // 리워드 받기 버튼
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!canClaimReward) return;
-    onSelect?.(selected, true);
-    onReward?.(rewardAmount);
-    setSelected(null);
-    onClose?.();
+    try {
+      const res = await apiGetReward();
+      onSelect?.(selected, true);
+      onReward?.({ clientEstimated: rewardAmount, server: res?.data });
+    } catch (e) {
+      console.error("[Mission] /reward 실패:", e?.response?.data || e);
+      onSelect?.(selected, true);
+      onReward?.(rewardAmount);
+    } finally {
+      setSelected(null);
+      onClose?.();
+    }
   };
 
   const onEsc = useCallback(
@@ -96,22 +129,46 @@ function Mission({
 
   useEffect(() => {
     window.addEventListener("keydown", onEsc);
-    const prev = document.body.style.overflow;
+    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       window.removeEventListener("keydown", onEsc);
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prevOverflow;
     };
   }, [onEsc]);
 
-  const handleReceiptVerify = async (mission) => {
-    const payload = {
-      mission_id: mission.id,
-      step_code: mission.step_code || "4.1",
-      action: "영수증 촬영",
-    };
-    await onReceipt?.(payload);
-    await refetchMissions?.();
+  const openFilePicker = (mission) => {
+    setPendingMission(mission);
+    fileInputRef.current?.click();
+  };
+
+  const onFilePicked = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || !pendingMission) {
+      e.target.value = "";
+      return;
+    }
+
+    try {
+      const { data } = await apiUploadReceipt({
+        missionId: pendingMission.id,
+        file,
+      });
+      alert(data?.message || "영수증 인증 성공");
+
+      onReceipt?.({
+        mission_id: pendingMission.id,
+        action: "영수증 촬영",
+        result: data,
+      });
+      await refetchMissions?.(); // 미션 목록 새로고침
+    } catch (err) {
+      console.error("[Mission] /mission/status 실패:", err?.response?.data || err);
+      alert(err?.response?.data?.message || "영수증 인증 실패");
+    } finally {
+      e.target.value = "";
+      setPendingMission(null);
+    }
   };
 
   return (
@@ -119,16 +176,21 @@ function Mission({
       className="mission-header-wrap"
       role="dialog"
       aria-modal="true"
-      aria-label="미션 선택"
       onClick={(e) => e.stopPropagation()}
     >
-      {/* 닫기 버튼 */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: "none" }}
+        onChange={onFilePicked}
+      />
+
       <div
         className="mission-close"
         role="button"
         tabIndex={0}
         onClick={onClose}
-        onKeyDown={(e) => e.key === "Enter" && onClose()}
         aria-label="닫기"
       >
         ✕
@@ -136,12 +198,13 @@ function Mission({
 
       <h2 className="mission-title-large">{header.title}</h2>
       <img className="mission-mascot" src={mascot} alt="핸썹이" />
-      <p className="mission-subtitle">{header.desc}</p>
+      <p className="mission-subtitle" style={{ whiteSpace: "pre-wrap" }}>
+        {header.desc}
+      </p>
 
       <div className="mission-list custom-scrollbar">
         {sourceList.map((item) => {
-          const verified = Number(item.is_successed) === 1;
-
+          const verified = item.is_successed === 1;
           return (
             <div
               key={item.id}
@@ -156,16 +219,14 @@ function Mission({
                   <div className="mission-title">{item.title}</div>
                   <div className="mission-desc">{item.desc}</div>
                 </div>
-
                 <button
                   type="button"
                   className={`receipt-badge ${verified ? "verified" : ""}`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleReceiptVerify(item);
+                    if (!verified) openFilePicker(item);
                   }}
                   disabled={verified}
-                  aria-label={`영수증 인증 ${verified ? "완료됨" : "진행"}`}
                 >
                   {verified ? (
                     <>
@@ -191,10 +252,8 @@ function Mission({
         className="mission-btn"
         onClick={handleConfirm}
         disabled={!canClaimReward}
-        aria-disabled={!canClaimReward}
-        title={canClaimReward ? "리워드 받기" : "미션 3개 이상 달성 시 활성화"}
       >
-        리워드 받기
+        {canClaimReward ? `리워드 받기` : `미션 ${MIN_FOR_REWARD}개 이상 완료 시 리워드`}
       </button>
     </div>
   );

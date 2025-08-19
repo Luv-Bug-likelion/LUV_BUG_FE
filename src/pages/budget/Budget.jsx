@@ -6,7 +6,6 @@ import Sijang from "../../components/Sijang";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
-// ✅ env 상수 정의
 const BACKEND_KEY = import.meta.env.VITE_BACKEND_DOMAIN_KEY;
 
 const Budget = ({ budget, setBudget, onNext }) => {
@@ -56,6 +55,32 @@ const Budget = ({ budget, setBudget, onNext }) => {
     return budgetVal.trim().length > 0 && Number.isFinite(n) && n > 0;
   };
 
+  const createMission = async (selectedMarketName) => {
+    try {
+      const res = await axios.post(`${BACKEND_KEY}/home`, {
+        market: selectedMarketName || "부천역곡남부시장",
+        budget: Number(budgetVal),
+        storyId: storyId ?? 1,
+      });
+
+      if (res.data.code === 200) {
+        console.log("스토리 생성 성공:", res.data.data);
+        const userKey = res.data.data;
+        window.localStorage.setItem("userKey", userKey);
+        setMade(true);
+        onNext?.(budgetVal);
+        navigate('/loading');
+      } else {
+        showToast(
+          "스토리 생성 실패: " + (res.data?.message ?? "알 수 없는 오류")
+        );
+      }
+    } catch (err) {
+      console.error("API 호출 에러:", err);
+      showToast("서버 오류가 발생했어요.");
+    }
+  };
+
   const handleButtonClick = async () => {
     console.log("버튼 눌림");
 
@@ -67,30 +92,6 @@ const Budget = ({ budget, setBudget, onNext }) => {
     if (marketStep) {
       setShowSijang(true);
       return;
-    }
-
-    if (!made) {
-      try {
-        // ✅ 여기서 env 상수 사용
-        const res = await axios.post(`${BACKEND_KEY}/home`, {
-          market: marketId || "부천역곡남부시장",
-          budget: Number(budgetVal),
-          storyId: storyId ?? 1,
-        });
-
-        if (res.data.code === 200) {
-          console.log("스토리 생성 성공:", res.data.data);
-          setMade(true);
-          onNext?.(budgetVal);
-        } else {
-          showToast(
-            "스토리 생성 실패: " + (res.data?.message ?? "알 수 없는 오류")
-          );
-        }
-      } catch (err) {
-        console.error("API 호출 에러:", err);
-        showToast("서버 오류가 발생했어요.");
-      }
     }
 
     setShowStory(true);
@@ -157,10 +158,14 @@ const Budget = ({ budget, setBudget, onNext }) => {
         <div className="modal-backdrop" onClick={() => setShowSijang(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <Sijang
-              onSelect={(id) => {
-                console.log("시장 선택됨:", id);
-                setMarketId(id);
+              onConfirm={async (marketName) => {
+                console.log("시장 최종 선택됨:", marketName);
+                setMarketId(marketName);
                 setShowSijang(false);
+
+                if (!made && isValidBudget()) {
+                  await createMission(marketName);
+                }
               }}
             />
           </div>
