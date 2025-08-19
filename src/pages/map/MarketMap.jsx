@@ -8,60 +8,6 @@ import Explain from "../../components/Explain.jsx";
 import "./MarketMap.css";
 
 const mockData = {
-<<<<<<< HEAD
-  marketName: "역곡남부시장",
-  signPost: "역곡역 2번출구",
-  meat: [
-    {
-      name: "상점 A 정육점",
-      address: "경기 부천시 소사구 괴안동 224-1",
-      phoneNumber: "032-123-4567",
-      industry: "정육점",
-    },
-    {
-      name: "상점 B 정육점",
-      address: "경기 부천시 소사구 부광로16번길 33 1층",
-      phoneNumber: "032-987-6543",
-      industry: "정육점",
-    },
-  ],
-  fish: [
-    {
-      name: "상점 C 정육점",
-      address: "경기 부천시 소사구 괴안동 224-1",
-      phoneNumber: "032-123-4567",
-      industry: "수산물 가게",
-    },
-    {
-      name: "상점 D 정육점",
-      address: "경기 부천시 소사구 부광로16번길 33 1층",
-      phoneNumber: "032-987-6543",
-      industry: "수산물 가게",
-    },
-  ],
-  vegetable: [
-    {
-      name: "싱싱 E 야채",
-      address: "경기 부천시 소사구 경인로498번길 26 역곡남부시장",
-      phoneNumber: "032-111-2222",
-      industry: "체소 가게",
-    },
-  ],
-  fruit: [
-    {
-      name: "상점 F 정육점",
-      address: "경기 부천시 소사구 괴안동 224-1",
-      phoneNumber: "032-123-4567",
-      industry: "과일 가게",
-    },
-    {
-      name: "상점 G 정육점",
-      address: "경기 부천시 소사구 부광로16번길 33 1층",
-      phoneNumber: "032-987-6543",
-      industry: "과일 가게",
-    },
-  ],
-=======
   "code": 200,
   "message": "상점 목록 조회 성공",
   "data": {
@@ -90,7 +36,6 @@ const mockData = {
     "vegetable": [],
     "fruit": []
   }
->>>>>>> f50ae49736e05e7e41960d35468456dcab89b856
 };
 
 const categoryKorean = {
