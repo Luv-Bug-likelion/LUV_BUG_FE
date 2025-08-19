@@ -11,17 +11,22 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  backdrop-filter: blur(2px); /* 뒷 배경을 흐리게 하는 효과 */
+  backdrop-filter: blur(1px); /* 뒷 배경을 흐리게 하는 효과 */
 }
 
 .modal-content {
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 16px;
+  background-color: #d7dbe0;
+  padding-left: 40px;
+  padding-right: 40px;
+  border-radius: 20px;
+  border: 3px solid rgba(0, 0, 0, 0.20);
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
-  width: 90%;
-  max-width: 380px;
+  width: 332px;
+  height: 506px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   
   /* 부드러운 등장 애니메이션 */
   animation: fadeIn 0.3s ease-out;
@@ -50,23 +55,18 @@
 }
 
 /* 버튼 스타일 */
-.modal-button {
-  background-color: #FF7A00; /* 포인트 컬러 */
+.explain-modal-btn {
+  background-color: #000; /* 포인트 컬러 */
   color: white;
+  font-size: 16px;
   border: none;
-  padding: 0.8rem 1.5rem;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
-  width: 100%;
+  width: 194px;
+  height: 51px;
+  text-align: center;
   transition: background-color 0.2s, transform 0.2s; /* 부드러운 효과 */
-}
-
-/* 버튼에 마우스를 올렸을 때 */
-.modal-button:hover {
-  background-color: #E66A00;
-  transform: scale(1.02); /* 살짝 커지는 효과 */
+  margin-top: 15px;
 }
 
 /* 등장 애니메이션 키프레임 */
