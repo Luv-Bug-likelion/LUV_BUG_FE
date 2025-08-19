@@ -8,73 +8,34 @@ import Explain from "../../components/Explain.jsx";
 import "./MarketMap.css";
 
 const mockData = {
-  marketName : "역곡남부시장",
-  signPost : "역곡역 2번출구",
-  meat: [
-    {
-      name: "상점 A 정육점",
-      address: "경기 부천시 소사구 괴안동 224-1",
-      phoneNumber: "032-123-4567",
-      industry: "정육점",
-      x: "126.812053188209",
-      y: "37.4822557893541"
-    },
-    {
-      name: "상점 B 정육점",
-      address: "경기 부천시 소사구 부광로16번길 33 1층",
-      phoneNumber: "032-987-6543",
-      industry: "정육점",
-      x: "126.812180546585",
-      y: "37.481648712744"
-    },
-  ],
-  fish: [
-    {
-      name: "상점 C 정육점",
-      address: "경기 부천시 소사구 괴안동 224-1",
-      phoneNumber: "032-123-4567",
-      industry: "수산물 가게",
-      x: "126.812053188209",
-      y: "37.4822557893541"
-    },
-    {
-      name: "상점 D 정육점",
-      address: "경기 부천시 소사구 부광로16번길 33 1층",
-      phoneNumber: "032-987-6543",
-      industry: "수산물 가게",
-      x: "126.811537497798",
-      y: "37.4825304059129"
-    },
-  ],
-  vegetable: [
-    {
-      name: "싱싱 E 야채",
-      address: "경기 부천시 소사구 경인로498번길 26 역곡남부시장",
-      phoneNumber: "032-111-2222",
-      industry: "체소 가게",
-      x: "126.811537497798",
-      y: "37.4825304059129"
-    },
-  ],
-  fruit: [
-    {
-      name: "상점 F 정육점",
-      address: "경기 부천시 소사구 괴안동 224-1",
-      phoneNumber: "032-123-4567",
-      industry: "과일 가게",
-      x: "126.812053188209",
-      y: "37.4822557893541"
-    },
-    {
-      name: "상점 G 정육점",
-      address: "경기 부천시 소사구 부광로16번길 33 1층",
-      phoneNumber: "032-987-6543",
-      industry: "과일 가게",
-      x: "126.812053188209",
-      y: "37.4822557893541"
-    },
-  ],
-  
+  "code": 200,
+  "message": "상점 목록 조회 성공",
+  "data": {
+    "marketName": "역곡남부시장",
+    "signPost": "역곡역 2번출구",
+    "meat": [
+      {
+        "name": "상점 A 정육점",
+        "address": "경기 부천시 소사구 괴안동 224-1",
+        "phoneNumber": "032-123-4567",
+        "industry": "정육점",
+        "x": "126.8123",
+        "y": "37.4823"
+      }
+    ],
+    "fish": [
+      {
+        "name": "상점 C 수산",
+        "address": "경기 부천시 소사구 부광로16번길 33 1층",
+        "phoneNumber": "032-987-6543",
+        "industry": "수산물 가게",
+        "x": "126.8125",
+        "y": "37.4825"
+      }
+    ],
+    "vegetable": [],
+    "fruit": []
+  }
 };
 
 const categoryKorean = {
@@ -110,12 +71,12 @@ const MarketMap = () => {
           }
         });
 
-        setStoreData(response.data);
-        console.log("성공!", response.data);
+        setStoreData(response.data.data);
+        console.log("성공!", response.data.data);
       } catch (err) {
         console.error("API 요청 실패:", err);
         console.log("목 데이터를 사용합니다.");
-        setStoreData(mockData);
+        setStoreData(mockData.data);
       }
     };
 
