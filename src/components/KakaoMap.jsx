@@ -1,5 +1,10 @@
 import { useEffect, useRef } from "react";
-import './KakaoMap.css'; 
+import './KakaoMap.css';
+import meatIcon from '../assets/carrot.svg';
+import vegetableIcon from '../assets/carrot.svg';
+import fruitIcon from '../assets/carrot.svg';
+import fishIcon from '../assets/carrot.svg';
+import defaultIcon from '../assets/carrot.svg';
 
 const KakaoMap = ({ center, storeData }) => {
     const mapRef = useRef(null);
@@ -17,7 +22,7 @@ const KakaoMap = ({ center, storeData }) => {
                 if (!mapRef.current) return;
                 
                 const map = new window.kakao.maps.Map(mapRef.current, {
-                    center: new window.kakao.maps.LatLng(center.lat, center.lng),
+                    center: new window.kakao.maps.LatLng(center.lat-0.0008, center.lng),
                     level: 3
                 });
 
@@ -38,71 +43,73 @@ const KakaoMap = ({ center, storeData }) => {
                     }],
                 });
 
-                window.kakao.maps.event.addListener(clusterer, 'clusterclick', function(cluster) {
-                  const center = cluster.getCenter();
-                  const adjustedLat = center.getLat() - 0.0011; //중심좌표 조절
-                  const adjustedLng = center.getLng()
-                  const newCenter = new window.kakao.maps.LatLng(adjustedLat, adjustedLng);
-
-                  map.setCenter(newCenter);
-
-                  const currentLevel = map.getLevel();
-                  if (currentLevel > 2) {
-                      map.setLevel(currentLevel - 1);
-                  }
-              });
-
-                const transparentMarkerImage = new window.kakao.maps.MarkerImage(
-                    "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==", // 1x1 투명 GIF
-                    new window.kakao.maps.Size(1, 1),
-                    { offset: new window.kakao.maps.Point(0, 0) }
-                );
-
-                const geocoder = new window.kakao.maps.services.Geocoder();
-                const categoryMap = {
-                    meat: '육류', vegetable: '채소', fruit: '과일', fish: '수산물',
+                const imageSize = new window.kakao.maps.Size(38, 38);
+                const markerImageSources = {
+                    meat: meatIcon,
+                    vegetable: vegetableIcon,
+                    fruit: fruitIcon,
+                    fish: fishIcon,
                 };
 
-                const geocodingPromises = Object.entries(storeData).flatMap(([category, stores]) =>
-                    stores.map(store => new Promise((resolve) => {
-                        geocoder.addressSearch(store.address, (result, status) => {
-                            if (status === window.kakao.maps.services.Status.OK) {
-                                const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-                                
-                                const marker = new window.kakao.maps.Marker({
-                                    position: coords,
-                                    image: transparentMarkerImage,
-                                });
+                const categoryMarkerImages = {};
+                for (const key in markerImageSources) {
+                    categoryMarkerImages[key] = new window.kakao.maps.MarkerImage(markerImageSources[key], imageSize);
+                }
+                const defaultMarkerImageSrc = defaultIcon;
 
-                                const customOverlay = new window.kakao.maps.CustomOverlay({
-                                    position: coords,
-                                    content: `<div class="custom-marker-label">${categoryMap[category]}</div>`,
-                                    map: null,
-                                });
+                // 3. 마커 생성 로직을 이미지 마커 방식으로 변경합니다.
+                const markers = Object.entries(storeData).flatMap(([category, stores]) =>
+                    stores.map(store => {
+                        if (store.y && store.x) {
+                            const coords = new window.kakao.maps.LatLng(store.y, store.x);
+                             const iconSrc = markerImageSources.hasOwnProperty(category) ? markerImageSources [category] : defaultMarkerImageSrc;
 
-                                resolve({ marker, customOverlay });
-                            } else {
-                                resolve(null);
-                            }
-                        });
-                    }))
-                );
+                             // 💡 동그라미 안에 이미지를 넣는 HTML content를 생성합니다.
+                             const content = document.createElement('div');
+                             content.className = 'custom-marker-container';
+
+                             const circle = document.createElement('div');
+                             circle.className = 'custom-marker-circle';
+
+                             const image = document.createElement('img');
+                             image.className = 'custom-marker-image';
+                             image.src = iconSrc;
+
+                             circle.appendChild(image);
+                             content.appendChild(circle);
+
+                             const customOverlay = new window.kakao.maps.CustomOverlay({
+                                 map: map,
+                                 position: coords,
+                                 content: content,
+                                 yAnchor: 1 // InfoWindow yAnchor 값과 동일하게 설정
+                             });
+                             return customOverlay;
+                         }
+                         return null;
+                     }).filter(Boolean)
+                 );
                 
-                Promise.all(geocodingPromises).then(results => {
-                    const validResults = results.filter(r => r !== null);
-                    const markers = validResults.map(r => r.marker);
-                    
-                    clusterer.addMarkers(markers);
-                    
-                    window.kakao.maps.event.addListener(map, 'idle', () => {
-                        validResults.forEach(r => {
-                            if (r.marker.getMap()) {
-                                r.customOverlay.setMap(map);
-                            } else {
-                                r.customOverlay.setMap(null);
-                            }
-                        });
-                    });
+                // 생성된 마커들을 클러스터러에 추가합니다.
+                clusterer.addMarkers(markers);
+                
+                // ℹ️ 기존의 transparentMarkerImage, customOverlay, idle 이벤트 리스너는 제거되었습니다.
+
+                // --- 주요 변경 사항 끝 ---
+
+                // 클러스터 클릭 이벤트는 그대로 유지됩니다.
+                window.kakao.maps.event.addListener(clusterer, 'clusterclick', function(cluster) {
+                    const center = cluster.getCenter();
+                    const adjustedLat = center.getLat() - 0.0011;
+                    const adjustedLng = center.getLng();
+                    const newCenter = new window.kakao.maps.LatLng(adjustedLat, adjustedLng);
+
+                    map.setCenter(newCenter);
+
+                    const currentLevel = map.getLevel();
+                    if (currentLevel > 2) {
+                        map.setLevel(currentLevel - 1);
+                    }
                 });
             });
         };

@@ -102,7 +102,13 @@ function Mission({
     },
   ];
 
+<<<<<<< HEAD
   const [sourceList, setSourceList] = useState(fallbackItems);
+=======
+  // 실제 mission 데이터 or fallback
+  const sourceList =
+    Array.isArray(missions) && missions.length > 0 ? missions : fallbackItems;
+>>>>>>> f50ae49736e05e7e41960d35468456dcab89b856
   const [selected, setSelected] = useState(null);
   const [pendingMission, setPendingMission] = useState(null);
   const fileInputRef = useRef(null);
@@ -128,11 +134,15 @@ function Mission({
     })();
   }, []);
 
+  // 완료한 미션 개수
   const completedCount = sourceList.filter(
     (m) => Number(m.is_successed) === 1
   ).length;
+
+  // 리워드 가능 여부
   const canClaimReward = completedCount >= MIN_FOR_REWARD;
 
+<<<<<<< HEAD
   const totalSpent = sourceList
     .filter((m) => Number(m.is_successed) === 1)
     .reduce((sum, m) => sum + (Number(m.title.replace(/[^0-9]/g, "")) || 0), 0);
@@ -153,6 +163,26 @@ function Mission({
       setSelected(null);
       onClose?.();
     }
+=======
+  // 총소비액 로직
+  const totalSpent = sourceList
+    .filter((m) => Number(m.is_successed) === 1)
+    .reduce((sum, m) => {
+      const price = Number(m.title.replace(/[^0-9]/g, "")) || 0;
+      return sum + price;
+    }, 0);
+
+  // 리워드 금액 계산 로직 추가 10%~20%
+  const rewardAmount = canClaimReward ? Math.floor(totalSpent * 0.1) : 0;
+
+  // 리워드 받기 버튼
+  const handleConfirm = () => {
+    if (!canClaimReward) return;
+    onSelect?.(selected, true);
+    onReward?.(rewardAmount);
+    setSelected(null);
+    onClose?.();
+>>>>>>> f50ae49736e05e7e41960d35468456dcab89b856
   };
 
   const onEsc = useCallback(
