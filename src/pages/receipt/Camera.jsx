@@ -25,11 +25,7 @@ const Camera = () => {
 
   const BACKEND_KEY = import.meta.env.VITE_BACKEND_DOMAIN_KEY
 
-  // 이전 페이지에서 넘어온 mission_id 추출
-  //const { mission_id } = location.state || {};
-
-    // [목 데이터] 개발용 mission_id 사용 - 나중에 API 개발되면 지우면 됨
-  const { mission_id } = mockData;
+  const mission_id = location.state?.missionId;
   // UI 상태 관리
   const [capturedImageSrc, setCapturedImageSrc] = useState(null); // 최종 고화질 이미지
   const [showGuide, setShowGuide] = useState(true);
@@ -149,6 +145,7 @@ const handleUserMedia = () => {
     const formData = new FormData();
     formData.append('image', file);
     formData.append('mission_id', mission_id); // mission_id 추가
+    formData.append('user_key', userKey);
 
     try {
       const response = await axios.post(`${BACKEND_KEY}/mission/receiptcheck`, formData, {

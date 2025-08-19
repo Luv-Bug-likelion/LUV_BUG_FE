@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+// ⬇️ 1. react-router-dom에서 useNavigate를 import 합니다.
+import { useNavigate } from "react-router-dom";
 import "./Mission.css";
 import mascot from "../assets/한복핸썹여백없음.png";
 import axios from "axios";
@@ -15,7 +17,6 @@ axios.defaults.withCredentials = true;
 async function apiGetMission() {
   const userKey = localStorage.getItem("userKey");
   if (!userKey) {
-    // userKey가 없으면 요청을 보내지 않고 에러를 발생시킴
     throw new Error("userKey가 없습니다. 먼저 로그인을 해주세요.");
   }
   return axios.get("/mission", {
@@ -25,15 +26,8 @@ async function apiGetMission() {
   });
 }
 
-async function apiUploadReceipt({ missionId, file }) {
-  const fd = new FormData();
-  fd.append("missionId", Number(missionId));
-  fd.append("image", file);
-
-  return axios.post("/mission/status", fd, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-}
+// 🛑 2. 파일 업로드 관련 API 함수 제거
+// async function apiUploadReceipt({ missionId, file }) { ... }
 
 async function apiGetReward() {
   return axios.get("/reward", {
@@ -44,64 +38,53 @@ async function apiGetReward() {
 
 // --- Mission 컴포넌트 ---
 function Mission({ onSelect, onClose, onReward, onReceipt, refetchMissions }) {
+  // ⬇️ 3. useNavigate 훅을 초기화합니다.
+  const navigate = useNavigate();
   const MIN_FOR_REWARD = 3;
 
   const [sourceList, setSourceList] = useState([]);
   const [header, setHeader] = useState({
     title: "미션 진행중!",
-    desc: "미션을 불러오는 중입니다...", // 초기 로딩 메시지
+    desc: "미션을 불러오는 중입니다...",
   });
   const [selected, setSelected] = useState(null);
-  const [pendingMission, setPendingMission] = useState(null);
-  const fileInputRef = useRef(null);
+  
+  // 🛑 2. 파일 업로드 관련 state 및 ref 제거
+  // const [pendingMission, setPendingMission] = useState(null);
+  // const fileInputRef = useRef(null);
 
   useEffect(() => {
     (async () => {
       try {
         const missionRes = await apiGetMission();
-        console.log("[Mission] /mission 응답:", missionRes.data);
-
         const missionData = missionRes.data?.data;
         if (missionData && missionData.missionList) {
-          // 헤더 설명 업데이트
           setHeader((prevHeader) => ({
             ...prevHeader,
             desc: `“${missionData.missionTitle}”\n핸썹이와 재료를 구매하세요`,
           }));
-
-          // 미션 목록 데이터 가공 및 상태 업데이트
           const formattedMissions = missionData.missionList.map((item) => ({
             id: item.missionId,
             title: `평균가격 : ${item.expectedPrice.toLocaleString()} 원`,
             desc: item.missionDetail,
-            is_successed: Number(item.is_success), // boolean을 숫자로 변환 (true=1, false=0)
+            is_successed: Number(item.is_success),
           }));
           setSourceList(formattedMissions);
         }
       } catch (e) {
         console.error("[Mission] 초기화 실패:", e?.response?.data || e);
         alert(e.message || "미션을 불러오는 데 실패했습니다.");
-        setHeader((prevHeader) => ({
-          ...prevHeader,
-          desc: "미션을 불러오는 데 실패했습니다.",
-        }));
       }
     })();
   }, []);
 
-  // 완료한 미션 개수
   const completedCount = sourceList.filter(
     (m) => m.is_successed === 1
   ).length;
-
-  // 리워드 가능 여부
   const canClaimReward = completedCount >= MIN_FOR_REWARD;
-
-  // 총 사용 금액 계산 (레거시 코드 호환)
   const totalSpent = sourceList
     .filter((m) => m.is_successed === 1)
     .reduce((sum, m) => sum + (Number(m.title.replace(/[^0-9]/g, "")) || 0), 0);
-  
   const rewardAmount = canClaimReward ? Math.floor(totalSpent * 0.1) : 0;
 
   const handleConfirm = async () => {
@@ -137,38 +120,13 @@ function Mission({ onSelect, onClose, onReward, onReceipt, refetchMissions }) {
     };
   }, [onEsc]);
 
-  const openFilePicker = (mission) => {
-    setPendingMission(mission);
-    fileInputRef.current?.click();
-  };
+  // 🛑 2. 파일 업로드 관련 함수들(openFilePicker, onFilePicked) 제거
 
-  const onFilePicked = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file || !pendingMission) {
-      e.target.value = "";
-      return;
-    }
-
-    try {
-      const { data } = await apiUploadReceipt({
-        missionId: pendingMission.id,
-        file,
-      });
-      alert(data?.message || "영수증 인증 성공");
-
-      onReceipt?.({
-        mission_id: pendingMission.id,
-        action: "영수증 촬영",
-        result: data,
-      });
-      await refetchMissions?.(); // 미션 목록 새로고침
-    } catch (err) {
-      console.error("[Mission] /mission/status 실패:", err?.response?.data || err);
-      alert(err?.response?.data?.message || "영수증 인증 실패");
-    } finally {
-      e.target.value = "";
-      setPendingMission(null);
-    }
+  // ⬇️ 4. 페이지 이동과 함께 missionId를 전달하는 함수
+  const handleNavigateToReceipt = (missionId) => {
+    // '/receipt-auth'는 영수증 인증 페이지의 경로입니다. 실제 경로에 맞게 수정해주세요.
+    navigate('/camera', { state: { missionId: missionId } });
+    console.log(`Navigating to receipt auth page with missionId: ${missionId}`);
   };
 
   return (
@@ -178,14 +136,7 @@ function Mission({ onSelect, onClose, onReward, onReceipt, refetchMissions }) {
       aria-modal="true"
       onClick={(e) => e.stopPropagation()}
     >
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        style={{ display: "none" }}
-        onChange={onFilePicked}
-      />
-
+      {/* 🛑 2. input file 태그 제거 */}
       <div
         className="mission-close"
         role="button"
@@ -195,7 +146,6 @@ function Mission({ onSelect, onClose, onReward, onReceipt, refetchMissions }) {
       >
         ✕
       </div>
-
       <h2 className="mission-title-large">{header.title}</h2>
       <img className="mission-mascot" src={mascot} alt="핸썹이" />
       <p className="mission-subtitle" style={{ whiteSpace: "pre-wrap" }}>
@@ -222,25 +172,14 @@ function Mission({ onSelect, onClose, onReward, onReceipt, refetchMissions }) {
                 <button
                   type="button"
                   className={`receipt-badge ${verified ? "verified" : ""}`}
+                  // ⬇️ 5. onClick 이벤트를 handleNavigateToReceipt 호출로 변경
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (!verified) openFilePicker(item);
+                    if (!verified) handleNavigateToReceipt(item.id);
                   }}
                   disabled={verified}
                 >
-                  {verified ? (
-                    <>
-                      도장
-                      <br />
-                      완료
-                    </>
-                  ) : (
-                    <>
-                      영수증
-                      <br />
-                      인증
-                    </>
-                  )}
+                  {verified ? ( <> 도장<br />완료</> ) : ( <> 영수증<br />인증</> )}
                 </button>
               </div>
             </div>
