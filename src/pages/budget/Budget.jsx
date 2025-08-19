@@ -65,9 +65,11 @@ const Budget = ({ budget, setBudget, onNext }) => {
 
       if (res.data.code === 200) {
         console.log("스토리 생성 성공:", res.data.data);
-        window.localStorage.setItem("userKey", res.data.data);
+        const userKey = res.data.data;
+        window.localStorage.setItem("userKey", userKey);
         setMade(true);
         onNext?.(budgetVal);
+        navigate('/loading');
       } else {
         showToast(
           "스토리 생성 실패: " + (res.data?.message ?? "알 수 없는 오류")
