@@ -90,19 +90,3 @@
   flex-shrink: 0;
   display: block;
 }
-
-.sijang-confirm:not(:disabled) {
-  cursor: not-allowed;
-  background: #111111;
-  color: #ffffff;
-}
-.sijang-confirm:disabled {
-  background: #ebebebcc;
-  color: #fff;
-  cursor: pointer;
-}
-.sijang-cell.disabled {
-  pointer-events: none; /* 클릭 막기 */
-  opacity: 0.5; /* 흐리게 표시 */
-  cursor: not-allowed;
-}
