@@ -147,14 +147,14 @@ const handleUserMedia = () => {
     setIsAnalyzing(true); // '분석 중' 오버레이 표시
 
     const formData = new FormData();
-    formData.append('receipt', file);
+    formData.append('image', file);
     formData.append('mission_id', mission_id); // mission_id 추가
 
     try {
       const response = await axios.post(`${BACKEND_KEY}/mission/receiptcheck`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'userKey': `${userKey}`
+          'userKey': userKey
         },
       });
 
@@ -181,9 +181,9 @@ const handleUserMedia = () => {
             // 다음 페이지에서 사용할 가상의 result 객체
       const mockResult = {
         message: "API 연동 전 Mock 데이터입니다.",
-        storeName: "엄지네 농산",
-        date: "2025-08-15",
-        totalPrice: 8000,
+        merchantName: "엄지네 농산",
+        visitDate: "2025-08-15",
+        totalAmount: 8000,
         mission_id: mission_id
       };
 
