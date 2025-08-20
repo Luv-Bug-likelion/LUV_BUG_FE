@@ -49,7 +49,7 @@ const StoreList = ({ stores, marketName, signPost }) => {
                     </div>
                      <div className="modal-each-container">
                       <img src={clockIcon} alt='시계 아이콘' style={{width:'10px', height:'12ox', marginRight:'8px'}}/>
-                      <p style={{fontSize: '12px', fontWeight: '500'}}>영업시간</p>
+                      <p style={{fontSize: '12px', fontWeight: '500'}}></p>
                     </div>
                     <div className="modal-each-container">
                       <img src={phoneIcon} alt='전화 아이콘' style={{width:'10px', height:'12ox', marginRight:'8px'}}/>
