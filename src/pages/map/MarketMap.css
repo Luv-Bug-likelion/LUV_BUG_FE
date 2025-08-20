@@ -216,7 +216,7 @@
 
 .store-item-modal {
   position: absolute; /* 💡 부모인 .store-item을 기준으로 위치합니다. */
-  top: 0;
+  top: 4px;
   left: 0;
   width: 100%; 
   height: 90%; 
