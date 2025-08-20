@@ -17,9 +17,12 @@
 }
 
 .custom-marker-container {
+    position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 .custom-marker-circle {
@@ -32,10 +35,37 @@
     justify-content: center;
     align-items: center;
     overflow: hidden; /* 이미지가 원 밖으로 나가지 않도록 */
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 .custom-marker-image {
     width: 70%; /* 원 안에 들어갈 이미지 크기 조절 */
     height: 70%; /* 원 안에 들어갈 이미지 크기 조절 */
     object-fit: contain; /* 이미지 비율 유지하며 내부 채우기 */
+}
+
+/* ✨ ==== [추가] 마커 이름 라벨 스타일 ==== */
+.map-marker-label {
+    position: absolute;
+    /* 마커 원 바로 아래에 위치하도록 top 설정 */
+    top: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    color: #333;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap; /* 이름이 길어도 줄바꿈 방지 */
+    text-align: center;
+    
+    /* 초기에는 숨겨진 상태 */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+
+/* active 클래스가 추가되면 라벨이 나타남 */
+.map-marker-label.active {
+    opacity: 1;
+    visibility: visible;
 }

@@ -7,42 +7,118 @@ import StoreList from "../../components/StoreList.jsx";
 import Explain from "../../components/Explain.jsx";
 import "./MarketMap.css";
 
+// 1. 변경된 API 형식에 맞게 mockData를 수정합니다.
 const mockData = {
   "code": 200,
   "message": "상점 목록 조회 성공",
-  "data": {
-    "marketName": "역곡남부시장",
-    "signPost": "역곡역 2번출구",
-    "meat": [
-      {
-        "name": "상점 A 정육점",
-        "address": "경기 부천시 소사구 괴안동 224-1",
-        "phoneNumber": "032-123-4567",
-        "industry": "정육점",
-        "x": "126.8123",
-        "y": "37.4823"
-      }
-    ],
-    "fish": [
-      {
-        "name": "상점 C 수산",
-        "address": "경기 부천시 소사구 부광로16번길 33 1층",
-        "phoneNumber": "032-987-6543",
-        "industry": "수산물 가게",
-        "x": "126.8125",
-        "y": "37.4825"
-      }
-    ],
-    "vegetable": [],
-    "fruit": []
-  }
+  "data": [
+    {
+      "name": "엄지농산물 역곡중국식품",
+      "address": "경기 부천시 소사구 괴안동 115",
+      "phoneNumber": "010-9900-0994",
+      "x": "126.811408753172",
+      "y": "37.4832365002343",
+      "industry": "가정,생활 > 식품판매", // '채소' 카테고리로 분류될 수 있습니다.
+      "subwayName": "역곡역 1호선",
+      "subwayDistance": "237m"
+    },
+    {
+      "name": "금자네수산",
+      "address": "경기 부천시 소사구 괴안동 105-2",
+      "phoneNumber": "032-344-2780",
+      "x": "126.811931843211",
+      "y": "37.4820416970728",
+      "industry": "음식점 > 한식 > 해물,생선 > 회", // '수산물' 카테고리
+      "subwayName": "역곡역 1호선",
+      "subwayDistance": "363m"
+    },
+    {
+      "name": "금산수산",
+      "address": "경기 부천시 소사구 괴안동 107-8",
+      "phoneNumber": "",
+      "x": "126.811508632874",
+      "y": "37.4826338856378",
+      "industry": "가정,생활 > 식품판매 > 수산물판매", // '수산물' 카테고리
+      "subwayName": "역곡역 1호선",
+      "subwayDistance": "301m"
+    },
+    {
+      "name": "한우촌정육점",
+      "address": "경기 부천시 소사구 괴안동 116-13",
+      "phoneNumber": "",
+      "x": "126.81205341749148",
+      "y": "37.482254528315835",
+      "industry": "가정,생활 > 식품판매 > 정육점", // '육류' 카테고리
+      "subwayName": "역곡역 1호선",
+      "subwayDistance": "339m"
+    },
+    {
+      "name": "강원축산",
+      "address": "경기 부천시 소사구 괴안동 105-3",
+      "phoneNumber": "032-341-0828",
+      "x": "126.812190580629",
+      "y": "37.4816600813982",
+      "industry": "가정,생활 > 식품판매 > 정육점", // '육류' 카테고리
+      "subwayName": "역곡역 1호선",
+      "subwayDistance": "405m"
+    }
+  ]
 };
 
+// 2. 카테고리 이름을 한글로 매핑합니다.
 const categoryKorean = {
   meat: "육류",
   vegetable: "채소",
   fruit: "과일",
   fish: "수산물",
+};
+
+// 3. ✨ industry 키워드를 기반으로 카테고리를 분류하는 규칙을 정의합니다.
+// 새로운 업종이 추가되면 이 배열에 키워드를 추가하여 관리할 수 있습니다.
+const categoryKeywords = {
+  meat: ["정육점"],
+  fish: ["수산", "회", "해물"],
+  vegetable: ["농산물", "채소"],
+  fruit: ["과일", "청과"],
+};
+
+const industryNameMapping = {
+  meat: "정육점",
+  fish: "수산물 가게",
+  vegetable: "야채 가게",
+  fruit: "과일 가게",
+};
+
+// API 응답 데이터를 프론트엔드에서 사용하기 편한 형태로 가공하는 함수
+const processData = (stores) => {
+  const categorizedStores = {
+    meat: [],
+    fish: [],
+    vegetable: [],
+    fruit: [],
+  };
+
+  stores.forEach((store) => {
+    for (const category in categoryKeywords) {
+      if (categoryKeywords[category].some(keyword => store.industry.includes(keyword))) {
+        
+        const modifiedStore = {
+          ...store,
+          // ✨ 이 부분을 industryNameMapping 객체로 변경했습니다.
+          industry: industryNameMapping[category] 
+        };
+
+        categorizedStores[category].push(modifiedStore);
+        break; 
+      }
+    }
+  });
+
+  return {
+    marketName: "역곡남부시장",
+    signPost: "역곡역 2번출구",
+    ...categorizedStores
+  };
 };
 
 const excludedKeys = ["marketName", "signPost"];
@@ -71,12 +147,16 @@ const MarketMap = () => {
           },
         });
 
-        setStoreData(response.data.data);
-        console.log("성공!", response.data.data);
+        // 4. API로부터 받은 데이터를 `processData` 함수로 가공합니다.
+        const processed = processData(response.data.data);
+        setStoreData(processed);
+        console.log("성공!", processed);
       } catch (err) {
         console.error("API 요청 실패:", err);
         console.log("목 데이터를 사용합니다.");
-        setStoreData(mockData.data);
+        // 5. 목 데이터도 동일하게 `processData` 함수로 가공합니다.
+        const processedMock = processData(mockData.data);
+        setStoreData(processedMock);
       }
     };
 
@@ -205,7 +285,7 @@ const MarketMap = () => {
           }}
           className="mission-board-button"
         >
-          미션현황({counter} / 5)
+          미션 현황 ({counter}/5)
         </button>
         <div className="store-list-container">
           <div className="filter-container">
