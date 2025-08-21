@@ -35,7 +35,6 @@ async function apiGetReward() {
   });
 }
 
-
 // --- Mission 컴포넌트 ---
 function Mission({ onSelect, onClose, onReward, onReceipt, refetchMissions }) {
   // ⬇️ 3. useNavigate 훅을 초기화합니다.
@@ -48,7 +47,7 @@ function Mission({ onSelect, onClose, onReward, onReceipt, refetchMissions }) {
     desc: "미션을 불러오는 중입니다...",
   });
   const [selected, setSelected] = useState(null);
-  
+
   // 🛑 2. 파일 업로드 관련 state 및 ref 제거
   // const [pendingMission, setPendingMission] = useState(null);
   // const fileInputRef = useRef(null);
@@ -78,9 +77,7 @@ function Mission({ onSelect, onClose, onReward, onReceipt, refetchMissions }) {
     })();
   }, []);
 
-  const completedCount = sourceList.filter(
-    (m) => m.is_successed === 1
-  ).length;
+  const completedCount = sourceList.filter((m) => m.is_successed === 1).length;
   const canClaimReward = completedCount >= MIN_FOR_REWARD;
   const totalSpent = sourceList
     .filter((m) => m.is_successed === 1)
@@ -125,7 +122,7 @@ function Mission({ onSelect, onClose, onReward, onReceipt, refetchMissions }) {
   // ⬇️ 4. 페이지 이동과 함께 missionId를 전달하는 함수
   const handleNavigateToReceipt = (missionId) => {
     // '/receipt-auth'는 영수증 인증 페이지의 경로입니다. 실제 경로에 맞게 수정해주세요.
-    navigate('/camera', { state: { missionId: missionId } });
+    navigate("/camera", { state: { missionId: missionId } });
     console.log(`Navigating to receipt auth page with missionId: ${missionId}`);
   };
 
@@ -179,7 +176,21 @@ function Mission({ onSelect, onClose, onReward, onReceipt, refetchMissions }) {
                   }}
                   disabled={verified}
                 >
-                  {verified ? ( <> 도장<br />완료</> ) : ( <> 영수증<br />인증</> )}
+                  {verified ? (
+                    <>
+                      {" "}
+                      도장
+                      <br />
+                      완료
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      영수증
+                      <br />
+                      인증
+                    </>
+                  )}
                 </button>
               </div>
             </div>
@@ -192,7 +203,7 @@ function Mission({ onSelect, onClose, onReward, onReceipt, refetchMissions }) {
         onClick={handleConfirm}
         disabled={!canClaimReward}
       >
-        {canClaimReward ? `리워드 받기` : `미션 ${MIN_FOR_REWARD}개 이상 완료 시 리워드`}
+        {canClaimReward ? `리워드 받기` : `리워드 받기`}
       </button>
     </div>
   );

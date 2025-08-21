@@ -62,15 +62,16 @@ function Sijang({ onSelect, onClose, onConfirm }) {
               <div
                 key={item.id}
                 className={`sijang-cell ${
-                  selected === item.id ? "active" : ""
+                  selected === item.value ? "active" : ""
                 } ${item.id !== 6 ? "disabled" : ""}`}
                 onClick={() => {
-                  if (item.id === 6) setSelected(item.value);
+                  if (item.id === 6) setSelected(item.value); // ✅ value 저장
                 }}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && item.id === 6) setSelected(item.id);
+                  if (e.key === "Enter" && item.id === 6)
+                    setSelected(item.value); // ✅ value 저장
                 }}
               >
                 {item.text}

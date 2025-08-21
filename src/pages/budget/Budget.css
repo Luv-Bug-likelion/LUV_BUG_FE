@@ -1,18 +1,3 @@
-html,
-body,
-#root {
-  height: 100%;
-}
-body {
-  margin: 0;
-  background: #d9d9d9;
-}
-#root {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-
 @font-face {
   font-family: "BMEuljiro10yearslater";
   src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/BMEuljiro10yearslater.woff")
@@ -125,11 +110,12 @@ body {
   border: none;
   border-radius: 20px;
   font-size: 20px;
-  background: #ffffff99;
+  background: #ffffff99; /* 기본 비활성 느낌 */
   color: #11111166;
   transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease,
     color 0.1s ease;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: not-allowed;
 }
 .mission-button:hover {
   background: #ffffff;
@@ -138,14 +124,12 @@ body {
 
 .modal-backdrop {
   position: fixed;
-  inset: 0; /* top/right/bottom/left: 0 */
-  background: rgba(0, 0, 0, 0.3); /* 살짝 어둡게 + 투명해야 blur가 보임 */
-  backdrop-filter: blur(6px); /* 핵심! */
-  -webkit-backdrop-filter: blur(6px);
+  inset: 0;
+  background: transparent !important;
+  display: transperent; /* 원래 center 하고 싶으면 flex/grid */
+  align-items: center;
+  justify-content: center;
   z-index: 1000;
-
-  display: grid;
-  place-items: center;
 }
 
 .modal-content {
@@ -156,12 +140,12 @@ body {
   max-height: 80vh;
   overflow: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  pointer-events: auto;
 }
-
 .toast {
   position: fixed;
   left: 50%;
-  top: 80%;
+  top: 70%;
   transform: translateX(-50%);
   max-width: 356px;
   max-height: 51px;
@@ -178,12 +162,31 @@ body {
 
 .mission-button.market {
   background: #ffffff;
-  color: black;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  color: #000;
+  cursor: pointer;
 }
 
-.mission-button.market:hover {
+.mission-button.is-active {
   background: #ffffff;
-  color: black;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  color: #111111;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.mission-button.is-active:hover {
+  transform: translateY(-1px);
+}
+
+/* 비활성 상태 */
+.mission-button.is-disabled {
+  background: #ffffff99;
+  color: #11111166;
+  cursor: not-allowed;
+}
+.modal-content .handle,
+.modal-content::before,
+.modal-content::after {
+  display: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
 }

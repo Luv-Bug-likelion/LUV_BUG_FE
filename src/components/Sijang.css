@@ -90,4 +90,10 @@
   align-self: center;
   flex-shrink: 0;
   display: block;
+  cursor: not-allowed;
+}
+.sijang-confirm:enabled {
+  background: #000; /* 검정 */
+  color: #fff; /* 흰색 */
+  cursor: pointer;
 }

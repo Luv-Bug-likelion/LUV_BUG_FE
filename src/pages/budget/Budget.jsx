@@ -52,7 +52,34 @@ const Budget = ({ budget, setBudget, onNext }) => {
 
   const isValidBudget = () => {
     const n = Number(budgetVal);
-    return budgetVal.trim().length > 0 && Number.isFinite(n) && n > 0;
+    if (!budgetVal.trim().length || !Number.isFinite(n) || n <= 0) {
+      return { valid: false, reason: "empty" }; // 입력 없음
+    }
+    if (n < 30000) {
+      return { valid: false, reason: "tooLow" }; // 3만원 미만
+    }
+    return { valid: true };
+  };
+
+  const handleButtonClick = async () => {
+    console.log("버튼 눌림");
+
+    const check = isValidBudget();
+    if (!check.valid) {
+      if (check.reason === "empty") {
+        showToast("예산을 먼저 입력해야 미션 생성이 가능합니다.");
+      } else if (check.reason === "tooLow") {
+        showToast("3만원 이상 입력해주세요.");
+      }
+      return;
+    }
+
+    if (marketStep) {
+      setShowSijang(true);
+      return;
+    }
+
+    setShowStory(true);
   };
 
   const createMission = async (selectedMarketName) => {
@@ -69,7 +96,7 @@ const Budget = ({ budget, setBudget, onNext }) => {
         window.localStorage.setItem("userKey", userKey);
         setMade(true);
         onNext?.(budgetVal);
-        navigate('/loading');
+        navigate("/loading");
       } else {
         showToast(
           "스토리 생성 실패: " + (res.data?.message ?? "알 수 없는 오류")
@@ -79,22 +106,6 @@ const Budget = ({ budget, setBudget, onNext }) => {
       console.error("API 호출 에러:", err);
       showToast("서버 오류가 발생했어요.");
     }
-  };
-
-  const handleButtonClick = async () => {
-    console.log("버튼 눌림");
-
-    if (!isValidBudget()) {
-      showToast("예산을 입력해야 실행돼요.");
-      return;
-    }
-
-    if (marketStep) {
-      setShowSijang(true);
-      return;
-    }
-
-    setShowStory(true);
   };
 
   const handleStorySelect = (id, fromStory) => {
@@ -117,6 +128,7 @@ const Budget = ({ budget, setBudget, onNext }) => {
     <div className={`budget-page ${showStory || showSijang ? "blur" : ""}`}>
       <h1>시장통</h1>
       <p>#시간 가는 줄 모르고 장 보며 통 크게 리워드 얻자!</p>
+
       <div>
         <div className="speech-bubble">{bubbleText}</div>
         <div className="money-character">
@@ -136,41 +148,42 @@ const Budget = ({ budget, setBudget, onNext }) => {
         />
         <span className="won-adorn">원</span>
       </div>
+
       <button
         type="button"
-        className="mission-button"
+        className={`mission-button ${marketStep ? "market" : ""} ${
+          isValidBudget() ? "is-active" : "is-disabled"
+        }`}
+        disabled={!isValidBudget()}
         onClick={handleButtonClick}
       >
         {buttonLabel}
       </button>
-      {showStory && (
-        <div className="modal-backdrop" onClick={() => setShowStory(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <Story
-              onSelect={(id) => {
-                handleStorySelect(id, true);
-              }}
-            />
-          </div>
-        </div>
-      )}
-      {showSijang && (
-        <div className="modal-backdrop" onClick={() => setShowSijang(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <Sijang
-              onConfirm={async (marketName) => {
-                console.log("시장 최종 선택됨:", marketName);
-                setMarketId(marketName);
-                setShowSijang(false);
 
-                if (!made && isValidBudget()) {
-                  await createMission(marketName);
-                }
-              }}
-            />
-          </div>
-        </div>
+      {/* Story 모달 */}
+      {showStory && (
+        <Story
+          onSelect={(id) => handleStorySelect(id, true)}
+          onClose={() => setShowStory(false)}
+        />
       )}
+
+      {/* Sijang 모달 */}
+      {showSijang && (
+        <Sijang
+          onConfirm={async (marketName) => {
+            console.log("시장 최종 선택됨:", marketName);
+            setMarketId(marketName);
+            setShowSijang(false);
+
+            if (!made && isValidBudget()) {
+              await createMission(marketName);
+            }
+          }}
+          onClose={() => setShowSijang(false)}
+        />
+      )}
+
       {toastMsg && <div className="toast">{toastMsg}</div>}
     </div>
   );

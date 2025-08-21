@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import "./Story.css";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -53,13 +54,18 @@ function Story({ onSelect, onClose }) {
     window.addEventListener("keydown", onEsc);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    // Add modal-open class to lock scroll on iOS/Safari as well
+    document.documentElement.classList.add("modal-open");
+    document.body.classList.add("modal-open");
     return () => {
       window.removeEventListener("keydown", onEsc);
       document.body.style.overflow = prev;
+      document.documentElement.classList.remove("modal-open");
+      document.body.classList.remove("modal-open");
     };
   }, [onEsc]);
 
-  return (
+  return createPortal(
     <>
       {/* 시장 모달처럼: 오버레이 */}
       <div className="story-overlay" onClick={onClose} />
@@ -81,7 +87,7 @@ function Story({ onSelect, onClose }) {
                   selected === item.id ? "active" : ""
                 } ${item.id === 3 ? "disabled" : ""}`}
                 onClick={() => {
-                  if (item.id !== 3) setSelected(item.id); // 3번은 클릭 안 먹히게
+                  if (item.id !== 3) setSelected(item.id);
                 }}
                 role="button"
                 tabIndex={0}
@@ -104,7 +110,8 @@ function Story({ onSelect, onClose }) {
           </button>
         </div>
       </div>
-    </>
+    </>,
+    document.body
   );
 }
 
