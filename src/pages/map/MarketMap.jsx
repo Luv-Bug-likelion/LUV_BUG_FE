@@ -146,6 +146,7 @@ const MarketMap = () => {
             userKey: userKey,
           },
         });
+        console.log("원래 데이터 :", response.data.data);
 
         // 4. API로부터 받은 데이터를 `processData` 함수로 가공합니다.
         const processed = processData(response.data.data);

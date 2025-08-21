@@ -54,9 +54,10 @@
 
     color: #333;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 600;
     white-space: nowrap; /* 이름이 길어도 줄바꿈 방지 */
     text-align: center;
+    text-shadow: -1px 0px white, 0px 1px white, 1px 0px white, 0px -1px white;
     
     /* 초기에는 숨겨진 상태 */
     opacity: 0;
