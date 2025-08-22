@@ -188,8 +188,8 @@ const categoryKorean = {
 // 새로운 업종이 추가되면 이 배열에 키워드를 추가하여 관리할 수 있습니다.
 const nameBasedCategoryKeywords = {
   meat: ["축산", "정육"],
-  fish: ["수산", "생선", "어시장"],
-  vegetable: ["야채", "농산물"],
+  fish: ["수산", "생선", "임자도"],
+  vegetable: ["농산물"],
   fruit: ["과일", "청과"],
 };
 
@@ -245,13 +245,12 @@ const processData = (stores) => {
 
   return {
     marketName: "역곡남부시장",
-    signPost: "역곡역 2번출구",
     ...categorizedStores
   };
 };
 
-const excludedKeys = ["marketName", "signPost"];
-const exclusionKeywords = ["홍운", "막걸리", "치킨", "계경", "수협", "마임", "완도"]; 
+const excludedKeys = ["marketName"];
+const exclusionKeywords = ["홍운", "막걸리", "치킨", "계경", "수협", "마임", "완도", "곱창", "역곡남부시장","꿀꺽","냉면", "양꼬치", "순대", "샤브", "흑돼지", "역곡점", "DT", "탐나", "뻥쟁이네", "청솔", "소담촌", "용호동",  ]; 
 
 const MarketMap = () => {
   const [mapCenter, setMapCenter] = useState({ lat: 37.482, lng: 126.8117 });
@@ -278,7 +277,7 @@ const MarketMap = () => {
         console.log("원래 데이터 :", response.data.data);
 
         // 4. API로부터 받은 데이터를 `processData` 함수로 가공합니다.
-        const processed = processData(response.data.data);
+        const processed = processData(response.data.data.stores);
         setStoreData(processed);
         console.log("성공!", processed);
       } catch (err) {
@@ -301,7 +300,7 @@ const MarketMap = () => {
   useEffect(() => {
     if (!storeData) return;
 
-    // 'marketName', 'signPost'를 제외한 모든 상점 데이터를 하나의 배열로 합칩니다.
+    // 'marketName'를 제외한 모든 상점 데이터를 하나의 배열로 합칩니다.
     const allStores = Object.keys(storeData)
       .filter(key => !excludedKeys.includes(key))
       .flatMap(key => storeData[key]);
@@ -330,7 +329,7 @@ const MarketMap = () => {
 
   const mapData = useMemo(() => {
     if (!storeData) return null;
-    const { marketName, signPost, ...filteredData } = storeData;
+    const { marketName, ...filteredData } = storeData;
     return filteredData;
   }, [storeData]);
 
@@ -416,7 +415,6 @@ const MarketMap = () => {
           <StoreList
             stores={filteredStores}
             marketName={storeData?.marketName}
-            signPost={storeData?.signPost}
           />
         </div>
       </div>
