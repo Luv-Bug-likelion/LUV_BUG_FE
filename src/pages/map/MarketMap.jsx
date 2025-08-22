@@ -382,7 +382,6 @@ const MarketMap = () => {
       <Explain
         isOpen={isExplainModalOpen}
         onClose={() => setIsExplainModalOpen(false)}
-        data={modalData}
       />
 
       <div className="header">
