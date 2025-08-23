@@ -8,7 +8,6 @@
 
 .onboarding-container {
   text-align: center;
-  margin-top: 200px;
   font-family: "BMEuljiro10yearslater", sans-serif;
   font-weight: normal;
 }
@@ -16,6 +15,7 @@
 .onboarding-container h1 {
   font-size: 60px;
   color: #2e4d3f;
+  padding-top: 200px;
 }
 
 .onboarding-container p {
