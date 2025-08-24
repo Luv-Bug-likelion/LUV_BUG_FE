@@ -20,6 +20,15 @@ html, body, #root {
   overflow: hidden;
   background-color: #000;
 }
+@media (min-width: 769px) {
+  .camera-container{
+    width: 388px;
+    height: 100%;
+  }
+
+}
+
+
 
 /* 3. webcam과 모든 이미지 요소들이 화면을 가득 채우도록 설정 */
 .camera-container webcam,
