@@ -179,17 +179,19 @@
 .mission-btn {
   width: 194px;
   height: 51px;
-  color: #ffffff66;
+  color: #fff;
   background-color: black;
   border-radius: 8px;
   display: block;
   margin: 28px auto 21px;
+  font-weight: bold;
 }
 
 .mission-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   filter: grayscale(0.3);
+  color: #ffffff66;
 }
 
 .mission-progress-hint {

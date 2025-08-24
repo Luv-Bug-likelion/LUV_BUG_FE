@@ -79,25 +79,11 @@ function Mission({ onSelect, onClose, onReward, onReceipt, refetchMissions }) {
 
   const completedCount = sourceList.filter((m) => m.is_successed === 1).length;
   const canClaimReward = completedCount >= MIN_FOR_REWARD;
-  const totalSpent = sourceList
-    .filter((m) => m.is_successed === 1)
-    .reduce((sum, m) => sum + (Number(m.title.replace(/[^0-9]/g, "")) || 0), 0);
-  const rewardAmount = canClaimReward ? Math.floor(totalSpent * 0.1) : 0;
 
-  const handleConfirm = async () => {
+  const handleConfirm = () => {
     if (!canClaimReward) return;
-    try {
-      const res = await apiGetReward();
-      onSelect?.(selected, true);
-      onReward?.({ clientEstimated: rewardAmount, server: res?.data });
-    } catch (e) {
-      console.error("[Mission] /reward 실패:", e?.response?.data || e);
-      onSelect?.(selected, true);
-      onReward?.(rewardAmount);
-    } finally {
-      setSelected(null);
-      onClose?.();
-    }
+    navigate("/reward");
+    onClose?.();
   };
 
   const onEsc = useCallback(
