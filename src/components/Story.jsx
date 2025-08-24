@@ -29,6 +29,7 @@ function Story({ onSelect, onClose }) {
 
   const handleConfirm = () => {
     if (!selected) return;
+    window.localStorage.setItem("storyId", selected);
     if (typeof onSelect === "function") {
       onSelect(selected, true);
       onClose?.();
