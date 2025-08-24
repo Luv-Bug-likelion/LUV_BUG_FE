@@ -250,7 +250,7 @@ const processData = (stores) => {
 };
 
 const excludedKeys = ["marketName"];
-const exclusionKeywords = ["홍운", "막걸리", "치킨", "계경", "수협", "마임", "완도", "곱창", "역곡남부시장","꿀꺽","냉면", "양꼬치", "순대", "샤브", "흑돼지", "역곡점", "DT", "탐나", "뻥쟁이네", "청솔", "소담촌", "용호동",  ]; 
+const exclusionKeywords = ["홍운", "막걸리", "치킨", "계경", "수협", "마임", "완도", "곱창", "역곡남부시장","꿀꺽","냉면", "양꼬치", "순대", "샤브", "흑돼지", "역곡점", "DT", "탐나", "뻥쟁이네", "청솔", "소담촌", "용호동", "명태", "괴안점", "우동", "역곡역점", "본가" ]; 
 
 const MarketMap = () => {
   const [mapCenter, setMapCenter] = useState({ lat: 37.482, lng: 126.8117 });
@@ -289,7 +289,31 @@ const MarketMap = () => {
       }
     };
 
+        // 🔹 [추가된 부분] 미션 완료 개수를 가져오는 함수입니다.
+    const fetchMissionCount = async () => {
+      try {
+        const userKey = localStorage.getItem("userKey");
+        if (!userKey) throw new Error("User key not found in localStorage");
+
+        const response = await axios.get(`${BACKEND_KEY}/mission`, {
+          headers: {
+            userKey: userKey,
+          },
+        });
+        
+        // API 응답에서 missionCompleteCount를 가져와 counter 상태를 업데이트합니다.
+        if (response.data && response.data.data) {
+          setCounter(response.data.data.missionCompleteCount);
+          console.log("미션 완료 개수 로딩 성공:", response.data.data.missionCompleteCount);
+        }
+      } catch (err) {
+        console.error("미션 데이터 요청 실패:", err);
+        // 에러 발생 시 counter를 0으로 유지하거나 다른 처리를 할 수 있습니다.
+      }
+    };
+
     fetchStoreData();
+    fetchMissionCount();
     const hasBeenExplained = sessionStorage.getItem('explained');
     if (!hasBeenExplained) {
       setIsExplainModalOpen(true); // 모달 열기
