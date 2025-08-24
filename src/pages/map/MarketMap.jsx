@@ -407,7 +407,7 @@ const MarketMap = () => {
           }}
           className="mission-board-button"
         >
-          미션 현황 ({counter}/5)
+          미션 현황 ({counter}/3)
         </button>
         <div className="store-list-container">
           <div className="filter-container">
