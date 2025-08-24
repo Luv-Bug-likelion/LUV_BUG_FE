@@ -4,7 +4,7 @@ import clockIcon from "../assets/clock.svg";
 import phoneIcon from "../assets/phone.svg";
 import closeIcon from "../assets/silverX.svg";
 
-const StoreList = ({ stores, marketName, signPost }) => {
+const StoreList = ({ stores, marketName}) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStore, setSelectedStore] = useState(null);
@@ -35,7 +35,7 @@ const StoreList = ({ stores, marketName, signPost }) => {
               <p style={{ fontSize:'20px', fontWeight:'500', marginTop:'12px'}}>{store.name}</p>
               <div className="sub-info-container">
                 <img src={addressIcon} alt='주소표시 아이콘' style={{width:'10px', height:'12ox', marginRight:'4px'}}/>
-                <p style={{fontSize: '14px', fontWeight: '500'}}>{signPost} · {store.industry}</p>
+                <p style={{fontSize: '14px', fontWeight: '500'}}>{store.subwayName} · {store.industry}</p>
               </div>
             </div>
             <button className="details-button" onClick={() => handleStoreClick(store)}>상세보기</button>
