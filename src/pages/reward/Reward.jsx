@@ -86,7 +86,7 @@ export default function Reward() {
         <p>사용금액 : {Number(missionData?.data?.totalSpent || 0).toLocaleString()}원</p>
         <p>리워드 지급 기준 : 결제 금액의 10%</p>
         <p>
-          지급 리워드 : {Number(missionData?.data?.totalSpent * 0.1 || 0).toLocaleString()}원
+          지급 리워드 : {Number(Math.floor(missionData?.data?.totalSpent * 0.1) || 0).toLocaleString()}원
         </p>
         <p>지급방법 : 현장지급</p>
       </div>
