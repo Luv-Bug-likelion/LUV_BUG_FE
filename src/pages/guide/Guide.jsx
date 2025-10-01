@@ -10,7 +10,7 @@ const Guide = () => {
     <div className="guide-page">
       <h1 className="guide-title">사용방법</h1>
       <p className="guide-sub">
-        #시간 가는 줄 모르고 장 보며 통 크게 리워드 받자!
+        #시간 가는 줄 모르고 장 보며 통 크게 리워드 받자!!
       </p>
       <div className="guide-card">
         <div className="guidestory">
